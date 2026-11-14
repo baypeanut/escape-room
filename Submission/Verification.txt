@@ -1,0 +1,16 @@
+Midnight Lockdown | Verification record
+14 November 2026
+
+CSER > Validate Quest Story: 80 checks passed.
+CSER > Validate Midnight Acceptance: 279 assertions passed.
+The chapter-one and chapter-three acceptance wins used actor UI, grab-state, placement and trigger paths. Native selection/release was exercised for the alternate circuit. These are editor simulations.
+
+Quest build: Unity 6000.5.9f1, version 0.2.0, code 2.
+Package: com.baypeanut.midnightlockdown
+ARM64 only, non-development, APK Signature Scheme v2 verified.
+Build completed with zero errors and five warnings from compiler and editor package processing.
+APK SHA-256: 8287786c80a379877c6cbe839ccec05e7ecdffe51a27af45c67753ea6240305e
+
+Four unused SDK helper assemblies are excluded with dependency checks. Temporary development connections are disabled and their private values were checked against the built package.
+
+Not measured: physical controller reach, stereo appearance, comfort, vibration feel, spatial sound perception or headset frame time. No Quest was connected. The team's own video and each member's completed peer assessment are still required. Detailed editor and package reports accompany the submission archive.

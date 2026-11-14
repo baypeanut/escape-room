@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CSER
 {
-    public sealed class NorthwindAtmosphere : MonoBehaviour
+    public sealed class MidnightAtmosphere : MonoBehaviour
     {
         public TaskId recoveryTask;
         public Renderer signalCore;

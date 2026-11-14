@@ -113978,7 +113978,7 @@ GameObject:
   - component: {fileID: 1688004054}
   - component: {fileID: 1688004053}
   m_Layer: 0
-  m_Name: NorthwindContainmentDisplay
+  m_Name: MidnightContainmentDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -113995,7 +113995,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bad7058808c9644be9b1faed24b43e12, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::CSER.NorthwindAtmosphere
+  m_EditorClassIdentifier: Assembly-CSharp::CSER.MidnightAtmosphere
   recoveryTask: 21
   signalCore: {fileID: 809871421}
   signalMotes: {fileID: 1240872012}

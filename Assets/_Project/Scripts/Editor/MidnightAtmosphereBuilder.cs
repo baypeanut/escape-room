@@ -10,9 +10,9 @@ using Object = UnityEngine.Object;
 
 namespace CSER.EditorTools
 {
-    public static class NorthwindAtmosphereBuilder
+    public static class MidnightAtmosphereBuilder
     {
-        const string RootName = "NorthwindContainmentDisplay";
+        const string RootName = "MidnightContainmentDisplay";
         const string MaterialFolder = "Assets/_Project/Materials/Assignment";
         const string SceneFolder = "Assets/_Project/Scenes/";
         static readonly string[] Scenes = { "Ch2_FredsOffice", "Ch3_ServerRoom" };
@@ -48,8 +48,8 @@ namespace CSER.EditorTools
             foreach (var root in scene.GetRootGameObjects())
                 if (root.name == RootName) Object.DestroyImmediate(root);
 
-            var coreMaterial = Material("ContainmentCore", "Northwind/Containment Signal");
-            var moteMaterial = Material("ContainmentMotes", "Northwind/Signal Mote");
+            var coreMaterial = Material("ContainmentCore", "Midnight/Containment Signal");
+            var moteMaterial = Material("ContainmentMotes", "Midnight/Signal Mote");
             var housingMaterial = Material("ContainmentHousing", "Universal Render Pipeline/Lit");
             housingMaterial.SetColor("_BaseColor", new Color(0.065f, 0.095f, 0.12f));
             housingMaterial.SetFloat("_Metallic", 0.5f);
@@ -64,7 +64,7 @@ namespace CSER.EditorTools
             var rootTransform = rootObject.transform;
             rootTransform.SetPositionAndRotation(office ? new Vector3(2.43f, 1.65f, 1.15f)
                 : new Vector3(1.1f, 1.65f, 2.43f), Quaternion.Euler(0, office ? 90 : 0, 0));
-            var atmosphere = rootObject.AddComponent<NorthwindAtmosphere>();
+            var atmosphere = rootObject.AddComponent<MidnightAtmosphere>();
             atmosphere.recoveryTask = office ? TaskId.QuarantineUSB : TaskId.SRV_Isolate;
             atmosphere.pendingText = office ? "! QUARANTINE PENDING" : "! ISOLATION PENDING";
             atmosphere.resolvedText = office ? "OK - USB SECURED" : "OK - NETWORK ISOLATED";

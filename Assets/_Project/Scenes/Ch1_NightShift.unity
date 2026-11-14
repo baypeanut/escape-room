@@ -7172,7 +7172,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '<b>NORTHWIND</b>
+  m_text: '<b>MIDNIGHT</b>
 
     <size=70%>SOC ANALYST
 
@@ -29042,7 +29042,7 @@ MonoBehaviour:
   kind: 7
   holdPose: 0
   displayName: Access badge
-  caption: Your Northwind access badge. It opens the doors you are cleared for.
+  caption: Your Midnight access badge. It opens the doors you are cleared for.
   wrongZoneHint: Keep your badge with you.
 --- !u!65 &2140722492
 BoxCollider:

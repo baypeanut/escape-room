@@ -1,4 +1,4 @@
-Shader "Northwind/Containment Signal"
+Shader "Midnight/Containment Signal"
 {
     Properties
     {

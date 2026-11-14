@@ -547,7 +547,7 @@ namespace CSER.EditorTools
             puzzles.wasteBin = binZone;
 
 
-            var docA = Paper("Doc_Salaries", new Vector3(1.12f, top + 0.004f, 0.32f), -15, paper, "<color=#C62828><b>CONFIDENTIAL</b></color>\n\n<b>Q3 Salary overview</b>\nNorthwind B.V.\n\nM. Jansen   EUR ******\nA. Visser   EUR ******\nF. Dekker   EUR ******");
+            var docA = Paper("Doc_Salaries", new Vector3(1.12f, top + 0.004f, 0.32f), -15, paper, "<color=#C62828><b>CONFIDENTIAL</b></color>\n\n<b>Q3 Salary overview</b>\nMidnight B.V.\n\nM. Jansen   EUR ******\nA. Visser   EUR ******\nF. Dekker   EUR ******");
             Grab(docA, ItemKind.Confidential, "Confidential document", "CONFIDENTIAL: Q3 salary overview, left on the desk.", "Confidential paper has to be destroyed. Use the shredder.");
             var docB = Paper("Doc_Clients", new Vector3(1.3f, top + 0.008f, 0.55f), 20, paper, "<color=#C62828><b>CONFIDENTIAL</b></color>\n\n<b>Client list 2026</b>\n\nHarbor Logistics\nVanguard Health\nPolder Energy\n...");
             Grab(docB, ItemKind.Confidential, "Confidential document", "CONFIDENTIAL: the 2026 client list. This shouldn't be lying around.", "Confidential paper has to be destroyed. Use the shredder.");

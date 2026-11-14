@@ -25,4 +25,4 @@ Use Unity 6000.5.9f1 with Android Build Support, SDK, NDK and OpenJDK. Open this
 Verification
 Run CSER > Validate Quest Story, then CSER > Validate Midnight Acceptance. These commands check game rules and scene connections in the editor. They use simulated buttons, object poses and trigger callbacks. They do not test physical Quest controllers, stereo rendering, comfort or headset frame rate. See Verification in the submission archive for the actual run reports. TESTING.txt covers the headset pass and the recording sequence.
 
-SOURCES.txt lists the starting project, models, textures, audio and software dependencies. RUBRIC.txt maps the assignment to the implementation. SUBMISSION.txt lists the remaining human submission material.
+SOURCES.txt lists contributors, models, textures, audio and software dependencies. RUBRIC.txt maps the assignment to the implementation. SUBMISSION.txt lists the remaining human submission material.

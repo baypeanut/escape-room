@@ -1,4 +1,4 @@
-Shader "Northwind/Signal Mote"
+Shader "Midnight/Signal Mote"
 {
     SubShader
     {

@@ -40,7 +40,7 @@ namespace CSER
                 new[] { "Fred's weak, guessable password", "A broken firewall", "A power outage" }, 0, "The logs show a normal login with Fred's password: 'Fluffy2019!' was guessed."),
             ("2/3  What stopped the theft of Project AURORA?",
                 new[] { "Turning off the printer", "Protecting AURORA and revoking the attacker's access", "Deleting Fred's emails" }, 1, "Revoking access stopped the transfer. Encryption protects the remaining files; it cannot erase copies already taken."),
-            ("3/3  What should Northwind change first?",
+            ("3/3  What should Midnight change first?",
                 new[] { "Nothing, it was bad luck", "Ban USB sticks only", "Awareness training and 2FA for everyone" }, 2, "Most of tonight's mistakes were human: training plus 2FA closes the biggest gaps."),
         };
 

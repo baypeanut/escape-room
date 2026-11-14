@@ -63,7 +63,7 @@ namespace CSER.EditorTools
 
         static void FinishScene(Scene scene, string name, Transform head, bool bake)
         {
-            NorthwindAtmosphereBuilder.BuildForScene(scene, name);
+            MidnightAtmosphereBuilder.BuildForScene(scene, name);
             MidnightExperienceBuilder.BuildForScene(scene, name);
             PostProcessing(head);
             ProbesFor(roomExtents);
@@ -449,7 +449,7 @@ namespace CSER.EditorTools
             Model(Root + "/Models/PolyHaven/potted_plant_02/potted_plant_02_1k.fbx", env, new Vector3(-2.2f, 0, 2.2f), 20, height: 1.4f);
             Model(Root + "/Models/PolyHaven/potted_plant_02/potted_plant_02_1k.fbx", env, new Vector3(2.4f, 0, 2.0f), 140, height: 1.2f);
             Model(Root + "/Models/PolyHaven/modern_arm_chair_01/modern_arm_chair_01_1k.fbx", env, new Vector3(-2.6f, 0, -0.6f), 70, height: 0.85f);
-            Label(env, "NORTHWIND", new Vector3(0, 2.9f, 3.6f), Quaternion.identity, new Vector2(3.2f, 0.6f), new Color(0.36f, 0.94f, 0.69f), true);
+            Label(env, "MIDNIGHT", new Vector3(0, 2.9f, 3.6f), Quaternion.identity, new Vector2(3.2f, 0.6f), new Color(0.36f, 0.94f, 0.69f), true);
             roomExtents = new Vector3(4.5f, 3f, 4.5f);
 
 
@@ -612,12 +612,12 @@ namespace CSER.EditorTools
             var badgeMat = Mat("BadgeBlue", Palette.Hex("1E4FA0"), 0.55f);
             LocalBox("Card", badge.transform, new Vector3(0, 0.0015f, 0), new Vector3(0.086f, 0.003f, 0.054f), badgeMat, false);
             LocalBox("Photo", badge.transform, new Vector3(-0.025f, 0.0032f, 0.0f), new Vector3(0.022f, 0.0005f, 0.028f), Mat("BadgePhoto", Palette.Hex("C9D6E8"), 0.3f), false);
-            var bl = Label(badge.transform, "<b>NORTHWIND</b>\n<size=70%>SOC ANALYST\nnight shift</size>", new Vector3(0.012f, 0.0045f, 0), Quaternion.Euler(90, 0, 0), new Vector2(0.05f, 0.04f), Color.white);
+            var bl = Label(badge.transform, "<b>MIDNIGHT</b>\n<size=70%>SOC ANALYST\nnight shift</size>", new Vector3(0.012f, 0.0045f, 0), Quaternion.Euler(90, 0, 0), new Vector2(0.05f, 0.04f), Color.white);
 
             var bc = badge.AddComponent<BoxCollider>();
             bc.center = new Vector3(0, 0.012f, 0);
             bc.size = new Vector3(0.11f, 0.03f, 0.08f);
-            Grab(badge, ItemKind.Badge, "Access badge", "Your Northwind access badge. It opens the doors you are cleared for.", "Keep your badge with you.");
+            Grab(badge, ItemKind.Badge, "Access badge", "Your Midnight access badge. It opens the doors you are cleared for.", "Keep your badge with you.");
 
 
             var readerRoot = new GameObject("BadgeReader").transform;

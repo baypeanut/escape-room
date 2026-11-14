@@ -157,7 +157,7 @@ namespace CSER
     {
         public const string Text =
             "<b>Midnight Lockdown</b>\n" +
-            "Original design, story and development: Northwind AR/VR project team (K068, K075, K081)\n" +
+            "Environment, initial story and interface: K068, K075, K081 (used with permission)\n" +
             "Assignment 6 adaptation: recovery circuit, maintenance rail, game rules, interaction fixes and environmental effects.\n\n" +
             "<b>Built with</b>  Unity 6 (URP), Meta XR Core & Interaction SDK\n" +
             "<b>3D models</b>  Poly Haven (CC0)\n" +

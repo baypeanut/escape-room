@@ -22,10 +22,10 @@ namespace CSER
 
         static readonly string[] Logs =
         {
-            "01:52  ANNA-PC-03    anna.v       sharepoint.northwind.local     2.1 MB",
-            "01:56  PRINTER-2F    -            print.northwind.local          0.3 MB",
+            "01:52  ANNA-PC-03    anna.v       sharepoint.midnight.local     2.1 MB",
+            "01:56  PRINTER-2F    -            print.midnight.local          0.3 MB",
             "01:58  FRED-PC-07    svc_backup   cdn-sync[.]xyz  (unknown)    214.0 MB",
-            "02:01  MAIL-GW       -            relay.northwind.local          4.4 MB",
+            "02:01  MAIL-GW       -            relay.midnight.local          4.4 MB",
             "02:04  FRED-PC-07    svc_backup   cdn-sync[.]xyz  (unknown)    401.6 MB",
             "02:07  ANNA-PC-03    anna.v       teams.microsoft.com            0.8 MB",
             "02:09  FRED-PC-07    svc_backup   cdn-sync[.]xyz  (unknown)    196.4 MB",
@@ -57,7 +57,7 @@ namespace CSER
             bg.rectTransform.Fill();
             var bar = UIKit.Panel(bg.transform, "Bar", Palette.Hex("15243A"), false);
             bar.rectTransform.Top(70);
-            var title = UIKit.Text(bar.transform, "<b>NORTHWIND SIEM</b>   <color=#7FA6D9>Security Operations Centre - night shift</color>", 26, Color.white, TextAlignmentOptions.MidlineLeft);
+            var title = UIKit.Text(bar.transform, "<b>MIDNIGHT SIEM</b>   <color=#7FA6D9>Security Operations Centre - night shift</color>", 26, Color.white, TextAlignmentOptions.MidlineLeft);
             title.rectTransform.Fill(28, 28, 0, 0);
             var gm = GameManager.I;
             if (!gm.IsDone(TaskId.SOC_OpenAlert)) BuildQueue(bg.transform);

@@ -16,17 +16,17 @@ using Object = UnityEngine.Object;
 namespace CSER.EditorTools
 {
     [InitializeOnLoad]
-    public static class NorthwindValidation
+    public static class MidnightValidation
     {
-        const string ActiveKey = "Northwind.Validation.Active";
-        const string ReportKey = "Northwind.Validation.Report";
-        const string ExitKey = "Northwind.Validation.Exit";
+        const string ActiveKey = "Midnight.Validation.Active";
+        const string ReportKey = "Midnight.Validation.Report";
+        const string ExitKey = "Midnight.Validation.Exit";
         static readonly string[] SaveKeys = { "cser.unlocked", "cser.points", "cser.result.1", "cser.result.2", "cser.result.3", "cser.result.1.latest", "cser.result.2.latest", "cser.result.3.latest" };
         static readonly Stack<IEnumerator> Steps = new Stack<IEnumerator>();
         static readonly List<string> RuntimeErrors = new List<string>();
         static double deadline;
 
-        static NorthwindValidation()
+        static MidnightValidation()
         {
             EditorApplication.playModeStateChanged += OnPlayMode;
             EditorApplication.update += Tick;
@@ -38,7 +38,7 @@ namespace CSER.EditorTools
         {
             try
             {
-                SessionState.SetString(ReportKey, "Northwind editor validation\nUnity " + Application.unityVersion + "\nThese checks exercise game logic and scene wiring; headset interaction and performance require a Quest 3 playtest.\n");
+                SessionState.SetString(ReportKey, "Midnight editor validation\nUnity " + Application.unityVersion + "\nThese checks exercise game logic and scene wiring; headset interaction and performance require a Quest 3 playtest.\n");
                 SessionState.SetInt(ExitKey, 1);
                 ApkBuilder.ConfigureQuest();
                 AuditSavedScenes();
@@ -78,8 +78,8 @@ namespace CSER.EditorTools
                     Check(particles > 0, scene.name + " includes a particle system");
                     bool custom = transforms.SelectMany(transform => transform.GetComponents<Renderer>())
                         .SelectMany(renderer => renderer.sharedMaterials)
-                        .Any(material => material && material.shader && material.shader.name.StartsWith("Northwind/", StringComparison.Ordinal));
-                    Check(custom, scene.name + " references an authored Northwind shader");
+                        .Any(material => material && material.shader && material.shader.name.StartsWith("Midnight/", StringComparison.Ordinal));
+                    Check(custom, scene.name + " references an authored Midnight shader");
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace CSER.EditorTools
             var keypad = Object.FindAnyObjectByType<DoorKeypad>();
             Check(manager && workstation && keypad, "office puzzle controllers are present");
             Check(manager.State == GameState.Intro, "office waits for readiness");
-            var atmosphere = Object.FindAnyObjectByType<NorthwindAtmosphere>();
+            var atmosphere = Object.FindAnyObjectByType<MidnightAtmosphere>();
             Check(atmosphere && !atmosphere.Emitting && !atmosphere.Resolved, "containment display is idle before readiness");
             Check(Mathf.Approximately(manager.TimeLimit, 600), "normal office timer is ten minutes");
             Click(workstation.transform, "Terminate session & lock workstation");
@@ -231,7 +231,7 @@ namespace CSER.EditorTools
             manager.DebugNearlyOutOfTime(0.02f);
             yield return Until(() => manager.State == GameState.Lost, 3, "deadline causes loss");
             yield return Wait(0.15);
-            atmosphere = Object.FindAnyObjectByType<NorthwindAtmosphere>();
+            atmosphere = Object.FindAnyObjectByType<MidnightAtmosphere>();
             Check(atmosphere && !atmosphere.Emitting && !atmosphere.Resolved, "loss stops unresolved containment emission");
             Click(workstation.transform, "Terminate session & lock workstation");
             Check(manager.State == GameState.Lost && manager.DoneCount == 0, "loss blocks further puzzle progress");
@@ -251,7 +251,7 @@ namespace CSER.EditorTools
             var manager = GameManager.I;
             Check(manager && manager.chapter == chapter, "chapter " + chapter + " starts with the correct controller");
             Check(manager.State == GameState.Intro && !manager.Complete(manager.Chapter.tasks[0].id), "chapter " + chapter + " rejects progress before readiness");
-            var atmosphere = Object.FindAnyObjectByType<NorthwindAtmosphere>();
+            var atmosphere = Object.FindAnyObjectByType<MidnightAtmosphere>();
             if (chapter == 3) Check(atmosphere && !atmosphere.Emitting && !atmosphere.Resolved, "server display waits for readiness");
             manager.BeginPlaying();
             yield return Wait(0.15);
@@ -338,19 +338,19 @@ namespace CSER.EditorTools
 
         static void WriteReport()
         {
-            string output = Environment.GetEnvironmentVariable("NORTHWIND_VALIDATION_OUTPUT");
-            if (string.IsNullOrWhiteSpace(output)) output = Path.GetFullPath("Builds/NorthwindValidation.txt");
+            string output = Environment.GetEnvironmentVariable("MIDNIGHT_VALIDATION_OUTPUT");
+            if (string.IsNullOrWhiteSpace(output)) output = Path.GetFullPath("Builds/MidnightValidation.txt");
             Directory.CreateDirectory(Path.GetDirectoryName(output));
             File.WriteAllText(output, SessionState.GetString(ReportKey, ""));
-            Debug.Log("Northwind validation result: " + output + "; exit=" + SessionState.GetInt(ExitKey, 1));
+            Debug.Log("Midnight validation result: " + output + "; exit=" + SessionState.GetInt(ExitKey, 1));
         }
 
         static void BackupProgress()
         {
             foreach (string key in SaveKeys)
             {
-                SessionState.SetBool("Northwind.Backup.Exists." + key, PlayerPrefs.HasKey(key));
-                SessionState.SetString("Northwind.Backup.Value." + key, key == "cser.unlocked" ? PlayerPrefs.GetInt(key, 1).ToString() : PlayerPrefs.GetString(key, ""));
+                SessionState.SetBool("Midnight.Backup.Exists." + key, PlayerPrefs.HasKey(key));
+                SessionState.SetString("Midnight.Backup.Value." + key, key == "cser.unlocked" ? PlayerPrefs.GetInt(key, 1).ToString() : PlayerPrefs.GetString(key, ""));
             }
         }
 
@@ -358,9 +358,9 @@ namespace CSER.EditorTools
         {
             foreach (string key in SaveKeys)
             {
-                if (!SessionState.GetBool("Northwind.Backup.Exists." + key, false)) PlayerPrefs.DeleteKey(key);
-                else if (key == "cser.unlocked") PlayerPrefs.SetInt(key, int.Parse(SessionState.GetString("Northwind.Backup.Value." + key, "1")));
-                else PlayerPrefs.SetString(key, SessionState.GetString("Northwind.Backup.Value." + key, ""));
+                if (!SessionState.GetBool("Midnight.Backup.Exists." + key, false)) PlayerPrefs.DeleteKey(key);
+                else if (key == "cser.unlocked") PlayerPrefs.SetInt(key, int.Parse(SessionState.GetString("Midnight.Backup.Value." + key, "1")));
+                else PlayerPrefs.SetString(key, SessionState.GetString("Midnight.Backup.Value." + key, ""));
             }
             PlayerPrefs.Save();
         }

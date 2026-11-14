@@ -16,7 +16,7 @@ namespace CSER
         [Tooltip("Optional floating keyboard canvas (1120 x 560, ray + poke) in front of the monitor; 6 x 6 cm keys. " +
                  "Without it the keyboard is drawn on the bottom of the screen.")]
         public RectTransform keyboardCanvas;
-        public string fredEmail = "fred.dekker@northwind.local";
+        public string fredEmail = "fred.dekker@midnight.local";
         public string fredPassword = "Fluffy2019!";
 
         enum Mode { Desktop, Login, ChangePassword, Main }
@@ -42,22 +42,22 @@ namespace CSER
 
         readonly List<Mail> mails = new List<Mail>
         {
-            new Mail { from = "IT Service Desk", address = "it-support@northwind-helpdesk.co", subject = "URGENT: your mailbox will be deleted in 2 hours", phishing = true,
-                body = "Dear user,\n\nWe have detected unusual activity on your mailbox. It will be <b>permanently deleted in 2 hours</b> unless you verify your login now:\n\n<color=#0F72C9><u>http://northwind-mail.verify-login.co/secure</u></color>\n\nIT Service Desk",
-                verdict = "Phishing: an external look-alike domain (northwind-helpdesk.co), a threat with a deadline, and a link to a fake login page." },
-            new Mail { from = "Anna Visser", address = "anna.visser@northwind.local", subject = "Minutes from Tuesday's project meeting", phishing = false,
+            new Mail { from = "IT Service Desk", address = "it-support@midnight-helpdesk.co", subject = "URGENT: your mailbox will be deleted in 2 hours", phishing = true,
+                body = "Dear user,\n\nWe have detected unusual activity on your mailbox. It will be <b>permanently deleted in 2 hours</b> unless you verify your login now:\n\n<color=#0F72C9><u>http://midnight-mail.verify-login.co/secure</u></color>\n\nIT Service Desk",
+                verdict = "Phishing: an external look-alike domain (midnight-helpdesk.co), a threat with a deadline, and a link to a fake login page." },
+            new Mail { from = "Anna Visser", address = "anna.visser@midnight.local", subject = "Minutes from Tuesday's project meeting", phishing = false,
                 body = "Hi Fred,\n\nAttached are the minutes from Tuesday. Action points are on page 2. Let me know if I missed anything.\n\n[Minutes_Tuesday.pdf - internal share]\n\nCheers,\nAnna",
                 verdict = "Safe: an internal colleague, an expected topic, and no pressure or unusual request." },
             new Mail { from = "DHL Express", address = "noreply@dhl-parcels-track.info", subject = "Parcel on hold - pay EUR 1.99 customs fee", phishing = true,
                 body = "Your parcel <b>#NL88231</b> is on hold at customs.\n\nPay the outstanding fee of <b>EUR 1.99</b> within 24 hours or it will be returned:\n\n<color=#0F72C9><u>https://dhl-parcels-track.info/pay</u></color>",
                 verdict = "Phishing: a small 'fee' to steal card details, a domain that isn't DHL's, and time pressure." },
-            new Mail { from = "HR Department", address = "hr@northwind.local", subject = "Reminder: security awareness training due Friday", phishing = false,
-                body = "Hello Fred,\n\nA friendly reminder that your yearly security awareness training is due this Friday. You can find it on the internal learning portal:\n\n<color=#0F72C9><u>https://learning.northwind.local</u></color>\n\nKind regards, HR",
+            new Mail { from = "HR Department", address = "hr@midnight.local", subject = "Reminder: security awareness training due Friday", phishing = false,
+                body = "Hello Fred,\n\nA friendly reminder that your yearly security awareness training is due this Friday. You can find it on the internal learning portal:\n\n<color=#0F72C9><u>https://learning.midnight.local</u></color>\n\nKind regards, HR",
                 verdict = "Safe: an internal sender, an internal link, and a routine announcement." },
             new Mail { from = "Mark Jansen (CEO)", address = "mark.jansen.ceo@gmail.com", subject = "Quick favour - are you at your desk?", phishing = true,
                 body = "Fred,\n\nI'm in a meeting and need a quick favour. Please buy <b>5 gift cards of EUR 100</b> for a client and send me the codes. Keep this confidential, I'll explain later.\n\nMark\n<size=18>Sent from my phone</size>",
                 verdict = "Phishing (CEO fraud): a personal Gmail address, secrecy, urgency and gift cards. Always verify through another channel." },
-            new Mail { from = "Facilities", address = "facilities@northwind.local", subject = "Office closed Monday for maintenance", phishing = false,
+            new Mail { from = "Facilities", address = "facilities@midnight.local", subject = "Office closed Monday for maintenance", phishing = false,
                 body = "Dear colleagues,\n\nThe office will be closed on Monday for maintenance of the air conditioning. Please work from home.\n\nFacilities team",
                 verdict = "Safe: an internal sender with plain information and nothing to click." },
         };
@@ -256,7 +256,7 @@ namespace CSER
         }
 
 
-        static readonly string[] Banned = { "fluffy", "fred", "dekker", "2019", "password", "northwind", "qwerty", "123456" };
+        static readonly string[] Banned = { "fluffy", "fred", "dekker", "2019", "password", "midnight", "qwerty", "123456" };
 
         static (string rule, Func<string, bool> ok)[] Rules =>
             new (string, Func<string, bool>)[]
@@ -334,7 +334,7 @@ namespace CSER
             }
             else
             {
-                var t = UIKit.Text(bar.transform, "FRED-PC-07  |  Northwind Secure Workspace", 22, Palette.InkSoft, TextAlignmentOptions.MidlineLeft);
+                var t = UIKit.Text(bar.transform, "FRED-PC-07  |  Midnight Secure Workspace", 22, Palette.InkSoft, TextAlignmentOptions.MidlineLeft);
                 t.rectTransform.Fill(20, 20, 0, 0);
             }
             content = UIKit.Rect(screen, "Content");

@@ -3,16 +3,16 @@
   {
    "key": "menu_welcome",
    "speaker": "Maya (SOC lead)",
-   "text": "Welcome to Northwind security. When you're ready, pick a chapter and press Play.",
-   "file": "menu_welcome_0",
-   "spoken": "Welcome to Northwind security. When you're ready, pick a chapter and press Play."
+   "text": "Welcome to the night shift. Pick a chapter when you're ready.",
+   "file": "",
+   "spoken": ""
   },
   {
    "key": "intro_ch1",
    "speaker": "Maya (SOC lead)",
-   "text": "Hey, it's Maya, your SOC lead. Welcome to your first night shift at Northwind.",
-   "file": "intro_ch1_0",
-   "spoken": "Hey, it's Maya, your SOC lead. Welcome to your first night shift at Northwind."
+   "text": "Hey, it's Maya, your SOC lead. Welcome to your first night shift.",
+   "file": "",
+   "spoken": ""
   },
   {
    "key": "intro_ch1",

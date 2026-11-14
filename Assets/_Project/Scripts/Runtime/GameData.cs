@@ -75,8 +75,8 @@ namespace CSER
         {
             new ChapterInfo
             {
-                number = 1, scene = "Ch1_NightShift", title = "Night Shift", subtitle = "Northwind HQ - Security Operations Centre - 02:10",
-                intro = "It's your first night shift as a <b>blue-team analyst</b> at Northwind.\n\nThe SOC is quiet, the coffee is cold, and the wall of screens is green. Maya, your SOC lead, is on the radio and will walk you through the job.\n\nLearn the controls, read the alerts, and be ready: tonight won't stay quiet for long.",
+                number = 1, scene = "Ch1_NightShift", title = "Night Shift", subtitle = "Midnight HQ - Security Operations Centre - 02:10",
+                intro = "It's your first night shift as a <b>blue-team analyst</b> at Midnight.\n\nThe SOC is quiet, the coffee is cold, and the wall of screens is green. Maya, your SOC lead, is on the radio and will walk you through the job.\n\nLearn the controls, read the alerts, and be ready: tonight won't stay quiet for long.",
                 outro = "You read the SIEM, traced an 812 MB upload to <b>FRED-PC-07</b>, classified it as <b>data exfiltration</b> and escalated it to the incident team. You also stopped the malware on the infected laptop and cut it off the network.\n\nThe attacker is still on Fred's workstation, uploading Project AURORA.",
                 tasks = new[]
                 {

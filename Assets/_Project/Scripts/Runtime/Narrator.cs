@@ -80,7 +80,7 @@ namespace CSER
             while (queue.Count > 0)
             {
                 var l = queue.Dequeue();
-                var clip = Resources.Load<AudioClip>("VO/" + l.file);
+                var clip = string.IsNullOrWhiteSpace(l.file) ? null : Resources.Load<AudioClip>("VO/" + l.file);
                 float dur = clip ? clip.length : Mathf.Clamp(l.text.Length * 0.06f, 2f, 9f);
                 if (clip) voice.PlayOneShot(clip);
                 GameUI.I?.Subtitle(l.speaker, l.text, dur + 0.6f);

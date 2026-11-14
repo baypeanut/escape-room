@@ -63,7 +63,7 @@ namespace CSER.EditorTools
             string[] scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
             if (scenes.Length != 4 || scenes.Any(scene => !File.Exists(scene)))
                 throw new InvalidOperationException("All four story scenes must exist and be enabled in Build Settings.");
-            string requestedOutput = Environment.GetEnvironmentVariable("NORTHWIND_APK_OUTPUT");
+            string requestedOutput = Environment.GetEnvironmentVariable("MIDNIGHT_APK_OUTPUT");
             string outPath = Path.GetFullPath(string.IsNullOrWhiteSpace(requestedOutput)
                 ? Path.Combine("Builds", "MidnightLockdown-Quest3.apk") : requestedOutput);
             Directory.CreateDirectory(Path.GetDirectoryName(outPath));

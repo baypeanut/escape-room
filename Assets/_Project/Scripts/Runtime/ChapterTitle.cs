@@ -24,6 +24,7 @@ namespace CSER
                 yield return null;
             }
             yield return new WaitForSeconds(0.9f);
+            if (gm.State != GameState.Intro) yield break;
             var card = GameUI.I ? GameUI.I.cardRoot : null;
             bool hidCard = card && card.gameObject.activeSelf;
             if (hidCard) card.gameObject.SetActive(false);
@@ -54,13 +55,15 @@ namespace CSER
 
             void Alpha(float a)
             {
+                if (gm.State != GameState.Intro || (Hub.I && Hub.I.IsOpen)) a = 0f;
                 t.color = new Color(1, 1, 1, a);
                 sr.color = new Color(0.04f, 0.07f, 0.12f, 0.82f * a);
             }
             Alpha(0);
             for (float x = 0; x < 1; x += Time.deltaTime / fade) { Alpha(x); yield return null; }
             Alpha(1);
-            yield return new WaitForSeconds(hold);
+            float until = Time.time + hold;
+            while (Time.time < until && gm.State == GameState.Intro) { Alpha(1f); yield return null; }
             for (float x = 1; x > 0; x -= Time.deltaTime / fade) { Alpha(x); yield return null; }
             Destroy(go);
 

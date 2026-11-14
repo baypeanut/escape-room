@@ -114,6 +114,7 @@ namespace CSER
             if (!IsOpen)
             {
                 IsOpen = true;
+                PriorityPopup.I?.ResetState();
                 root.gameObject.SetActive(true);
                 var fwd = Vector3.ProjectOnPlane(head.forward, Vector3.up).normalized;
                 if (fwd.sqrMagnitude < 1e-4f) fwd = Vector3.forward;

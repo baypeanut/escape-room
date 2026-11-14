@@ -56,6 +56,7 @@ namespace CSER
 
         void Update()
         {
+            if (hudCanvas && hudCanvas.gameObject.activeSelf == MenuOpen) hudCanvas.gameObject.SetActive(!MenuOpen);
             bool toggle = OVRInput.GetDown(OVRInput.Button.Start) || OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.Four);
             bool wrist = false, hint = false;
 #if ENABLE_INPUT_SYSTEM

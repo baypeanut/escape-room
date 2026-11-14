@@ -14,6 +14,8 @@ namespace CSER
 
         public static void Record(int chapter, float seconds, int hints, int mistakes)
         {
+            if (chapter < 1 || chapter > GameData.Chapters.Length || float.IsNaN(seconds)
+                || float.IsInfinity(seconds) || seconds < 0 || hints < 0 || mistakes < 0) return;
             results[chapter] = new StoryProgress.Result { done = true, seconds = seconds, hints = hints, mistakes = mistakes };
         }
 

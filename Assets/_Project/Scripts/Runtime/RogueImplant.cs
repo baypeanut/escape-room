@@ -32,7 +32,8 @@ namespace CSER
 
         void Update()
         {
-            if (led && !unplugged) led.sharedMaterial = Mathf.Repeat(Time.time, 0.6f) < 0.3f ? ledOn : ledOff;
+            bool steady = AlertStateManager.I ? AlertStateManager.I.ReduceFlashing : PlayerPrefs.GetInt("cser.reduceFlash", 0) == 1;
+            if (led && !unplugged) led.sharedMaterial = steady || Mathf.Repeat(Time.time, 0.6f) < 0.3f ? ledOn : ledOff;
             UpdateCable();
 
             if (unplugged && plug && plug.TryGetComponent<Rigidbody>(out var prb) && prb.isKinematic

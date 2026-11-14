@@ -91,7 +91,7 @@ namespace CSER
             if (left) o2.x = -o2.x;
             transform.localPosition = o2;
             transform.localRotation = Quaternion.identity;
-            GameUI.I?.Caption("Flashlight strapped to your wrist: it points where your hand points. Press I / X to store it.", Palette.Ink, 6f);
+            GameUI.I?.Caption("Flashlight on your wrist. Point your hand to aim; click the right stick to switch it. Press X for inventory.", Palette.Ink, 6f);
         }
 
         void Unmount()
@@ -120,11 +120,7 @@ namespace CSER
         void LateUpdate()
         {
 
-            if (item.Mounted)
-            {
-                var fwd = Vector3.ProjectOnPlane(transform.parent.forward, Vector3.up);
-                if (fwd.sqrMagnitude > 1e-4f) transform.rotation = Quaternion.LookRotation(fwd.normalized, Vector3.up);
-            }
+            if (item.Mounted) transform.localRotation = Quaternion.identity;
 
             beam.transform.localRotation = Quaternion.identity;
             beam.transform.localPosition = new Vector3(0, 0, 0.1f);

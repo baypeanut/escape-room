@@ -28,3 +28,6 @@ Assets/_Recovery*
 
 /.utmp/
 
+/Screenshots/
+/Assets/Resources/DevAgentSettings.asset
+/Assets/Resources/DevAgentSettings.asset.meta

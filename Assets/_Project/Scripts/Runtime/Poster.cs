@@ -44,7 +44,7 @@ namespace CSER
             {
                 ("LONG", "12+ characters.\nA passphrase of\nrandom words works", Palette.PosterOlive),
                 ("MIXED", "Upper & lower case,\nnumbers and\nsymbols", Palette.Purple),
-                ("NOT PERSONAL", "No pets, names,\nbirthdays or years.\nNo: Fluffy2019!", Palette.PosterBlue),
+                ("NOT PERSONAL", "Avoid pet names,\nbirthdays and\npersonal dates.", Palette.PosterBlue),
                 ("UNIQUE", "Never reuse a\npassword across\naccounts", Palette.Orange),
                 ("2-FACTOR", "Add a second\nfactor wherever\nyou can", Palette.PosterMagenta),
                 ("SECRET", "Never share it,\nnever write it down\nor throw it away", Palette.PosterGreen),

@@ -83,7 +83,7 @@ namespace CSER
 
         void Show()
         {
-            if (!open && display) display.text = string.Join(" ", entry.PadRight(4, '_').ToCharArray());
+            if (!open && !flashing && display) display.text = string.Join(" ", entry.PadRight(4, '_').ToCharArray());
         }
 
 #if UNITY_EDITOR

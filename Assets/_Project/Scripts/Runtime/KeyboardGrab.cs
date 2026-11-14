@@ -76,8 +76,11 @@ namespace CSER
             if (held || !g || !GameManager.I || GameManager.I.State != GameState.Playing || g.IsHeld || g.Stored || g.Mounted || g.Consumed || g.Deposited || !g.gameObject.activeInHierarchy) return false;
             held = g;
             var rb = g.GetComponent<Rigidbody>();
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            if (!rb.isKinematic)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
             rb.isKinematic = true;
             g.ForceHeld = true;
             g.EverHeld = true;
@@ -94,6 +97,7 @@ namespace CSER
             rb.isKinematic = false;
             rb.useGravity = true;
             rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             rb.WakeUp();
             Sfx.Play(Sfx.I ? Sfx.I.drop : null, 0.6f);
         }

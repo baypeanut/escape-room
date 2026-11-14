@@ -12,17 +12,19 @@ namespace CSER
         public bool HasItem => held != null;
 
         void Awake() => I = this;
-        void OnDestroy() { if (I == this) I = null; }
+        void OnDisable() => Release();
+        void OnDestroy() { Release(); if (I == this) I = null; }
+        void OnApplicationPause(bool paused) { if (paused) Release(); }
+        void OnApplicationFocus(bool focused) { if (!focused) Release(); }
 
         OVRCameraRig rig;
         GrabItem held;
-        Transform heldHome;
 
         void Update()
         {
             if (!rig) rig = FindAnyObjectByType<OVRCameraRig>();
-            if (!rig || GameManager.I == null || GameManager.I.State != GameState.Playing) return;
             if (held && (!held.ForceHeld || held.Mounted || held.Stored || held.Consumed || held.Deposited || !held.gameObject.activeInHierarchy)) Forget();
+            if (!rig || GameManager.I == null || GameManager.I.State != GameState.Playing) { Release(); return; }
             if (held && OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch)) Release();
 
 #if ENABLE_INPUT_SYSTEM
@@ -71,7 +73,7 @@ namespace CSER
 
         public bool Hold(GrabItem g)
         {
-            if (held || !g) return false;
+            if (held || !g || !GameManager.I || GameManager.I.State != GameState.Playing || g.IsHeld || g.Stored || g.Mounted || g.Consumed || g.Deposited || !g.gameObject.activeInHierarchy) return false;
             held = g;
             var rb = g.GetComponent<Rigidbody>();
             rb.linearVelocity = Vector3.zero;
@@ -87,6 +89,7 @@ namespace CSER
             if (!held) return;
             var g = held;
             Forget();
+            if (g.Mounted || g.Stored || g.Consumed || g.Deposited || !g.gameObject.activeInHierarchy) return;
             var rb = g.GetComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = true;

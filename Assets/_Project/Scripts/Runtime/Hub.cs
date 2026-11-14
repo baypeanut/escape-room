@@ -231,7 +231,7 @@ namespace CSER
             var controls = UIKit.Panel(tabBody, "Controls", Palette.CardTint);
             controls.rectTransform.Fill(500, 0, 84, 90);
             var ct = UIKit.Text(controls.transform,
-                "<b>Controls</b>\n<b>Z</b>  use screen   <b>O</b>  step back\n<b>L</b>  this pop-up\n<b>H</b>  next hint\n<b>X</b>  wrist panel\n<b>I</b>  inventory\n<b>4</b> grab    <b>3</b> release\n<b>F</b>  flashlight\n<b>P</b>  door / knock\n<b>Esc</b> close   <b>Arrows</b> switch tab\n<size=80%><color=#5A6372>Quest: left stick click = this pop-up</color></size>",
+                "<b>Quest controls</b>\nPoint and press trigger to use screens.\nGrip to pick up; release to drop.\nUse the locomotion stick to teleport or turn.\n<b>Y / B</b>  open this menu\n<b>X</b>  inventory\nTap <b>MENU / HINT / BAG</b> on your wrist.\nClick the right stick to switch your mounted flashlight.\nUse BAG recovery for misplaced items.",
                 20, Palette.Ink, TextAlignmentOptions.TopLeft);
             ct.rectTransform.Fill(16, 10, 10, 8);
             ct.enableAutoSizing = true;
@@ -289,7 +289,7 @@ namespace CSER
             Slot(inner.transform, new Vector2(26, -104), size, handItem, false, () =>
             {
                 if (inv == null) return;
-                if (handItem == null) { message = "Your hand is empty. Grab something (4), then click here."; Rebuild(); return; }
+                if (handItem == null) { message = "Your hand is empty. Grip an item, then select HAND to store it."; Rebuild(); return; }
                 inv.Store(handItem);
                 message = inv.Note ?? "";
                 Rebuild();
@@ -328,9 +328,20 @@ namespace CSER
             var help = UIKit.Text(inner.transform,
                 "Select an item to retrieve it. Squeeze and release right grip to drop it.\nSelect HAND or an empty slot to store what you are holding.",
                 21, McDark, TextAlignmentOptions.TopLeft);
-            help.rectTransform.At(new Vector2(0, 0), new Vector2(26, 70), new Vector2(880, 80), Vector2.zero);
+            help.rectTransform.At(new Vector2(0, 0), new Vector2(26, 130), new Vector2(880, 72), Vector2.zero);
+            var recover = UIKit.Button(inner.transform, "Recover misplaced items", Palette.Blue, Color.white, () =>
+            {
+                if (inv == null) return;
+                inv.RecoverLooseItems();
+                message = inv.Note ?? "";
+                Rebuild();
+            }, 23);
+            recover.GetComponent<RectTransform>().At(new Vector2(0, 0), new Vector2(26, 66), new Vector2(410, 58), Vector2.zero);
             var msg = UIKit.Text(inner.transform, message, 24, Palette.Ink, TextAlignmentOptions.Left, FontStyles.Bold);
             msg.rectTransform.At(new Vector2(0, 0), new Vector2(26, 14), new Vector2(880, 44), Vector2.zero);
+            msg.enableAutoSizing = true;
+            msg.fontSizeMin = 16;
+            msg.fontSizeMax = 24;
         }
 
         void Slot(Transform parent, Vector2 pos, float size, GrabItem item, bool isSelected, System.Action onClick)

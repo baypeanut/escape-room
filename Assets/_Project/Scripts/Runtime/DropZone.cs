@@ -17,12 +17,18 @@ namespace CSER
 
         void OnTriggerStay(Collider other)
         {
-            if (!GameManager.I || GameManager.I.State != GameState.Playing) return;
-            var item = other.GetComponentInParent<GrabItem>();
-            if (!item || item.Consumed || item.Deposited || item.IsHeld || !item.EverHeld) return;
-            if (Array.IndexOf(accepts, item.kind) >= 0)
+            TryAccept(other.GetComponentInParent<GrabItem>());
+        }
+
+        public bool TryAccept(GrabItem item)
+        {
+            if (!GameManager.I || GameManager.I.State != GameState.Playing) return false;
+            if (!item || !item.gameObject.activeInHierarchy || item.Consumed || item.Deposited || item.Stored || item.Mounted || item.IsHeld || !item.EverHeld) return false;
+            if (accepts != null && Array.IndexOf(accepts, item.kind) >= 0)
             {
+                if (Accepted == null) return false;
                 Accepted?.Invoke(item);
+                return true;
             }
             else if (item.CanBeRejected)
             {
@@ -31,6 +37,7 @@ namespace CSER
                 if (item.kind != ItemKind.Prop)
                     GameManager.I?.Mistake(string.IsNullOrEmpty(item.wrongZoneHint) ? $"That doesn't belong in the {zoneName}." : item.wrongZoneHint);
             }
+            return false;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace CSER
         public static event Action<GrabItem> AnyGrabbed;
         public static event Action<GrabItem> AnyStored;
 
-        public bool IsHeld { get; private set; }
+        public bool IsHeld => !Consumed && !Stored && !Deposited && (ForceHeld || HandHeld);
         public bool Consumed { get; private set; }
 
         public bool EverHeld { get; set; }
@@ -36,13 +36,27 @@ namespace CSER
 
         public bool Deposited { get; private set; }
 
-        public bool CanStore => kind != ItemKind.Plug && !Consumed;
+        public bool CanStore => kind != ItemKind.Plug && !Consumed && !Stored && !Deposited && (!Mounted || kind == ItemKind.Flashlight);
+        public bool CanRecover => gameObject.activeInHierarchy && !IsHeld && !Mounted && !Stored && !Consumed && !Deposited && kind != ItemKind.Plug;
+        public Vector3 HomePosition => homePos;
 
         Grabbable[] grabbables;
         Rigidbody rb;
         Vector3 homePos;
         Quaternion homeRot;
         float rejectCooldown, settleFor;
+        bool wasHeld;
+
+        bool HandHeld
+        {
+            get
+            {
+                if (grabbables == null) return false;
+                foreach (var grabbable in grabbables)
+                    if (grabbable && grabbable.isActiveAndEnabled && grabbable.SelectingPointsCount > 0) return true;
+                return false;
+            }
+        }
 
         void Awake()
         {
@@ -54,16 +68,12 @@ namespace CSER
 
         void Update()
         {
-            bool handHeld = false;
-            foreach (var g in grabbables)
-                if (g && g.SelectingPointsCount > 0) { handHeld = true; break; }
+            if (HandHeld) ForceHeld = false;
+            bool held = IsHeld;
 
-            if (handHeld) ForceHeld = false;
-            bool held = ForceHeld || handHeld;
-
-            if (held != IsHeld)
+            if (held != wasHeld)
             {
-                IsHeld = held;
+                wasHeld = held;
                 if (held)
                 {
                     EverHeld = true;
@@ -93,7 +103,7 @@ namespace CSER
                 if (free && !rb.isKinematic && rb.IsSleeping()) rb.WakeUp();
             }
 
-            if (transform.position.y < -1f || transform.position.sqrMagnitude > 100f) ResetHome();
+            if (CanRecover && (transform.position.y < homePos.y - 2f || (transform.position - homePos).sqrMagnitude > 144f)) ResetHome();
         }
 
         static Transform eyes;
@@ -129,9 +139,10 @@ namespace CSER
 
         public void Store()
         {
-            if (Stored) return;
+            if (!CanStore) return;
             AnyStored?.Invoke(this);
-            IsHeld = false;
+            ForceHeld = false;
+            wasHeld = false;
             Mounted = false;
             Stored = true;
             gameObject.SetActive(false);
@@ -140,7 +151,10 @@ namespace CSER
 
         public void Restore(Vector3 pos, Quaternion rot)
         {
+            if (Consumed || Deposited) return;
             Stored = false;
+            ForceHeld = false;
+            wasHeld = false;
             gameObject.SetActive(true);
             EverHeld = true;
             Teleport(pos, rot);
@@ -160,7 +174,20 @@ namespace CSER
             foreach (var g in grabbables) if (g) g.enabled = false;
         }
 
-        public void ResetHome() => Teleport(homePos, homeRot);
+        public void ResetHome()
+        {
+            if (!CanRecover) return;
+            ForceHeld = false;
+            wasHeld = false;
+            rejectCooldown = 0f;
+            Teleport(homePos, homeRot);
+            if (EverHeld)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+                rb.WakeUp();
+            }
+        }
 
 
         public void Teleport(Vector3 pos, Quaternion rot)
@@ -191,6 +218,8 @@ namespace CSER
         {
             if (Consumed) return;
             Consumed = true;
+            ForceHeld = false;
+            wasHeld = false;
             foreach (var g in grabbables) if (g) g.enabled = false;
             StartCoroutine(ConsumeRoutine(into, duration, sink));
         }

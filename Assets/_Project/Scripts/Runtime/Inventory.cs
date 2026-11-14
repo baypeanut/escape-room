@@ -84,17 +84,18 @@ namespace CSER
 
         public bool TakeToHand(int index)
         {
+            if (!GameManager.I || GameManager.I.State != GameState.Playing) return false;
             if (index < 0 || index >= slots.Count) return false;
             var kg = KeyboardGrab.I;
             if (!kg || kg.HasItem) return false;
             var item = slots[index];
-            slots.RemoveAt(index);
             var rig = FindAnyObjectByType<OVRCameraRig>();
             Vector3 pos; Quaternion rot;
             if (rig && rig.rightHandAnchor) { pos = rig.rightHandAnchor.position + rig.rightHandAnchor.forward * 0.18f; rot = rig.rightHandAnchor.rotation; }
             else { FlatForward(out var f); pos = head.position + f * 0.5f + Vector3.down * 0.3f; rot = Quaternion.LookRotation(f, Vector3.up); }
             item.Restore(pos, rot);
-            kg.Hold(item);
+            if (!kg.Hold(item)) { item.Store(); return false; }
+            slots.RemoveAt(index);
             return true;
         }
 
@@ -147,7 +148,8 @@ namespace CSER
 
         public bool Store(GrabItem item)
         {
-            if (!item || !item.CanStore || slots.Contains(item)) return false;
+            if (!GameManager.I || GameManager.I.State != GameState.Playing) return false;
+            if (!item || !item.CanStore || (!item.IsHeld && !item.Mounted) || slots.Contains(item)) return false;
             if (slots.Count >= Capacity)
             {
                 pending = item;
@@ -167,6 +169,7 @@ namespace CSER
 
         public void TakeOut(int index)
         {
+            if (!GameManager.I || GameManager.I.State != GameState.Playing) return;
             if (index < 0 || index >= slots.Count) return;
             var item = slots[index];
             slots.RemoveAt(index);
@@ -178,6 +181,7 @@ namespace CSER
 
         public void ThrowOut(int index)
         {
+            if (!GameManager.I || GameManager.I.State != GameState.Playing) return;
             if (index < 0 || index >= slots.Count) return;
             var item = slots[index];
             slots.RemoveAt(index);
@@ -189,6 +193,24 @@ namespace CSER
             note = $"Threw out the {item.displayName}. It lies on the floor if you need it again.";
             if (pending) Store(pending);
             else Rebuild();
+        }
+
+        public int RecoverLooseItems()
+        {
+            if (!GameManager.I || GameManager.I.State != GameState.Playing) return 0;
+            int recovered = 0;
+            foreach (var item in FindObjectsByType<GrabItem>(FindObjectsInactive.Exclude))
+            {
+                if (!item.CanRecover || (item.transform.position - item.HomePosition).sqrMagnitude < 0.0016f) continue;
+                item.ResetHome();
+                recovered++;
+            }
+            note = recovered > 0
+                ? $"Returned {recovered} misplaced item{(recovered == 1 ? "" : "s")} to the original location."
+                : "No loose items need recovery. Held, stored and secured items stay in place.";
+            GameUI.I?.Caption(note, Palette.Ink, 5f);
+            Sfx.Play(Sfx.I ? Sfx.I.confirm : null, 0.6f);
+            return recovered;
         }
 
         void FlatForward(out Vector3 fwd)

@@ -109,10 +109,9 @@ namespace CSER
                 "<b>Hand tracking</b>\n" +
                 "- Pinch to click with the hand ray; poke screens with your finger; make a fist to grab.\n" +
                 "- Look at your left wrist: tap MENU or HINT.\n\n" +
-                "<b>Meta XR Simulator (keyboard & mouse)</b>\n" +
-                "- Hold right mouse to look, WASD to move, Q/E up/down, left click = trigger.\n" +
-                "- <b>P</b> at a door = knock / tap your badge. <b>F</b> = flashlight on/off. <b>M</b> = menu.\n\n" +
-                "<b>Stuck?</b>  Follow Maya on the radio and the green marker. Hints get stronger each time you ask.",
+                "<b>Maintenance rail</b>\n" +
+                "- In the server aisle, hold grip near the rail and pull your hand back to move along it. Release to stop. Teleport is always available.\n\n" +
+                "<b>Stuck?</b>  Read the radio captions and follow the green marker. Hints get stronger each time you ask.",
                 25, Color.white);
             t.rectTransform.Fill(36, 36, 28, 20);
         }
@@ -121,14 +120,15 @@ namespace CSER
         {
             Toggle(p, 0, "Guide marker", Guide.Enabled, v => Guide.Enabled = v);
             Toggle(p, 1, "Ambient sound", Sfx.AmbienceOn, v => Sfx.I?.SetAmbience(v));
+            Toggle(p, 2, "Radio voice", Narrator.VoiceEnabled, v => Narrator.VoiceEnabled = v);
             var q = UIKit.Text(p, "<b>Quality</b>", 28, Color.white);
-            q.rectTransform.At(new Vector2(0, 1), new Vector2(40, -230), new Vector2(300, 60), new Vector2(0, 1));
+            q.rectTransform.At(new Vector2(0, 1), new Vector2(40, -320), new Vector2(300, 60), new Vector2(0, 1));
             string[] levels = { "Low", "Medium", "High" };
             for (int i = 0; i < 3; i++)
             {
                 int idx = i;
                 var b = UIKit.Button(p, levels[i], Quality.Level == i ? Palette.Blue : Palette.Hex("1C2A3D"), Color.white, () => { Quality.Set(idx); Build(); }, 26);
-                b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(340 + i * 180, -230), new Vector2(170, 60), new Vector2(0, 1));
+                b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(340 + i * 180, -320), new Vector2(170, 60), new Vector2(0, 1));
             }
             var reset = UIKit.Button(p, "Reset story progress", Palette.Red, Color.white, () => { StoryProgress.ResetAll(); page = 0; Build(); }, 26);
             reset.GetComponent<RectTransform>().At(new Vector2(0, 0), new Vector2(40, 40), new Vector2(380, 70), Vector2.zero);
@@ -158,7 +158,7 @@ namespace CSER
         public const string Text =
             "<b>Midnight Lockdown</b>\n" +
             "Original design, story and development: Northwind AR/VR project team (K068, K075, K081)\n" +
-            "Assignment 6 adaptation: timer, puzzle and interaction fixes, and environmental effects.\n\n" +
+            "Assignment 6 adaptation: recovery circuit, maintenance rail, game rules, interaction fixes and environmental effects.\n\n" +
             "<b>Built with</b>  Unity 6 (URP), Meta XR Core & Interaction SDK\n" +
             "<b>3D models</b>  Poly Haven (CC0)\n" +
             "<b>Materials & textures</b>  ambientCG (CC0), Poly Haven (CC0)\n" +
@@ -166,6 +166,6 @@ namespace CSER
             "<b>UI sounds</b>  Kenney Interface Sounds (CC0)\n" +
             "<b>Voices</b>  Windows speech synthesis (Microsoft Zira / David)\n" +
             "<b>Photos</b>  Wikimedia Commons (public domain)\n\n" +
-            "Inspired by the 2D game 'Cyber Security Escape Room Online'. No assets or text from that game are used.";
+            "Design reference: 'Cyber Security Escape Room Online'. Full asset sources are in SOURCES.txt.";
     }
 }

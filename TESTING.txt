@@ -1,0 +1,33 @@
+Midnight Lockdown | Headset test and recording notes
+
+Use the APK supplied with this source archive. Record the headset view and a separate view of the person playing. Do not use old footage for changed mechanics.
+
+Headset pass
+1. Open a new story. Read the chapter card, choose BEGIN and confirm the objective is visible on the wrist. Open and close MENU, BAG, Notes and Settings with the controller. Turn radio voice on and off; captions must still work.
+2. Teleport around each room, turn and lean near walls. The world should not shove the player when they lean. Check that teleport destinations are clear of desks and racks. Check seated and standing reach.
+3. In Night Shift, inspect logs, try a wrong answer, then identify the host and attack. Clean the infected laptop and use the badge. The exit must wait for all required tasks.
+4. In the office, release the wrong item over a container and check its rejection. Complete evidence, shredding and USB tasks. Use the clues and token to secure the account. Correct a wrong email classification. Enter the door code early: DENIED must remain visible. Finish containment and use the code on the board.
+5. In the server room, find and disconnect the implant, bag it and isolate the right port. Try restoring before containment; it must stay locked. Rotate and release the circuit cartridges to form a complete path, then choose the clean backup. A second route should work on a replay. A wrong orientation or a dangling connection must not complete it.
+6. Try the rail with either empty hand. Pull, release, reverse direction and stop at each end. Open the menu while holding it; motion must stop. Keep teleport available. Check comfort with a spotter; a controller test in the editor does not establish this.
+7. Drop a required item out of reach. BAG > Recover misplaced items should return loose items without duplicating stored, held or completed evidence. Complete the chapter and check the session results.
+8. In a separate office run, let the clock expire. Confirm loss blocks progress, then retry and check the clock, objects and answers reset.
+9. Turn Reduce flashing on. Check ceiling lights, warning lights, the rogue-device LED and custom displays. Test sound and vibration. Suspend/resume the application and check that vibration does not remain on.
+10. Check both eyes for shader artifacts, readable screens at working distance, stable frame rate and clear audio. Note the measured headset frame rate and any discomfort or reach issue.
+
+Video outline
+Show the title and the three rooms. Explain the analyst's task briefly.
+Show a physical evidence task and the password/token clues.
+Show a wrong input being rejected and corrected.
+Show the circuit being built, including turning and moving a cartridge.
+Show the maintenance rail and ordinary teleport.
+Frame a custom containment display while its particles and state change are visible.
+Show the final escape, plus a separate timeout and retry.
+Include a real person wearing the headset, ideally beside the matching headset capture.
+
+Reflection notes to discuss in your own words
+The new circuit requires spatial reasoning instead of another terminal answer.
+The rail explores hand-driven movement while retaining teleport for access and comfort.
+Containment gates prevent recovery and reporting before the physical incident is controlled.
+Tests caught stale button callbacks, incorrect replay statistics and missing settings access.
+Explain which parts came from the starting project and what your team changed.
+Describe what the actual headset playtest showed, including anything that still needs work.

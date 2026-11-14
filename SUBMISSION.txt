@@ -1,13 +1,12 @@
 Assignment 6 | Midnight Lockdown
 
-Source location: https://github.com/baypeanut/escape-room
-The MidnightLockdown project folder in this archive is a local copy. README.txt has the setup and test steps. SOURCES.txt lists the game and the other sources used.
+Code: https://github.com/baypeanut/escape-room
+The MidnightLockdown folder contains the matching Unity source. README.txt explains setup and controls. SOURCES.txt lists outside resources. Verification contains the editor and APK reports for this build.
 
-Video to record on the submission build
-Start in the control room and show moving with a controller. In the office show a rejected item, a successful physical task, correcting an inbox decision, and reading the code at the board. Frame the containment beacon so its shader and particles are visible. Show the correct keypad entry and the server-room conclusion. Record a separate short clip of the timer expiring and retrying. Include footage of a person playing. A side-by-side headset capture and player view can make the interactions easier to see.
+To complete the submission
+Add the team's own gameplay and design-reflection video, including footage of a person playing on the headset. TESTING.txt gives the shots and device checks. A desktop editor test is not a headset playtest.
 
-Design reflection prompts
-Why make the player use room clues and physical objects to find answers? What changed when the countdown was shortened? How do sounds and the containment signal tell the player when an action matters? Explain what the team implemented, what came from the original project, and what the headset test showed.
+Each human team member must complete a separate Peer Assessment, including the group-process questions. A blank copy from the assignment link is included under Submission. The official source is:
+https://drive.google.com/file/d/1R13P3vBRWSvSlA0-BSigkWNNUmDHkrGv/view
 
-Still to supply
-The team's own gameplay and reflection video link, plus the separate course Peer Assessment from each human team member.
+Do not submit this blank form as a completed assessment. Add the actual video link or file and each member's completed assessment before handing in the archive.

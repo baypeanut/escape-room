@@ -24,6 +24,7 @@ namespace CSER
         TMP_Text objectiveText;
         string message = "";
         int selected = -1;
+        int notesPage;
         string signature = "";
         float refreshTimer, hintTimer;
         TaskId lastObjective;
@@ -67,7 +68,7 @@ namespace CSER
             }
             if (toggle) Toggle(Tab);
             if (close && IsOpen) Close();
-            if (step != 0) SetTab((Tab + step + 2) % 2);
+            if (step != 0) SetTab((Tab + step + 4) % 4);
 
             UpdateAutoHints(gm);
 
@@ -76,7 +77,7 @@ namespace CSER
             if ((refreshTimer -= Time.unscaledDeltaTime) <= 0)
             {
                 refreshTimer = 0.4f;
-                if (Tab == 1 && Signature() != signature) Rebuild();
+                if (Signature() != signature) Rebuild();
             }
         }
 
@@ -109,7 +110,7 @@ namespace CSER
         public void Open(int tab)
         {
             if (GameManager.I == null || GameManager.I.State != GameState.Playing) return;
-            Tab = Mathf.Clamp(tab, 0, 1);
+            Tab = Mathf.Clamp(tab, 0, 3);
             if (!IsOpen)
             {
                 IsOpen = true;
@@ -190,20 +191,26 @@ namespace CSER
             Tabs();
             tabBody = UIKit.Rect(body, "TabBody");
             tabBody.Fill(0, 0, 76, 0);
-            if (Tab == 0) BuildMenu(); else BuildInventory();
+            switch (Tab)
+            {
+                case 0: BuildMenu(); break;
+                case 1: BuildInventory(); break;
+                case 2: BuildNotes(); break;
+                case 3: BuildSettings(); break;
+            }
         }
 
         void Tabs()
         {
-            string[] names = { "Menu", "Inventory" };
+            string[] names = { "Menu", "Inventory", "Notes", "Settings" };
             for (int i = 0; i < names.Length; i++)
             {
                 int idx = i;
                 var b = UIKit.Button(body, names[i], i == Tab ? Palette.Blue : Palette.CardTint, i == Tab ? Color.white : Palette.Ink, () => SetTab(idx), 26);
-                b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(i * 215, 0), new Vector2(205, 60), new Vector2(0, 1));
+                b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(i * 153, 0), new Vector2(145, 60), new Vector2(0, 1));
             }
             var hints = UIKit.Button(body, AutoHints ? "Hints: ON" : "Hints: OFF", AutoHints ? Palette.Yellow : Palette.CardTint, Palette.Ink, () => SetAutoHints(!AutoHints), 26);
-            hints.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(2 * 215, 0), new Vector2(205, 60), new Vector2(0, 1));
+            hints.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(612, 0), new Vector2(160, 60), new Vector2(0, 1));
             var close = UIKit.Button(body, "Close", Palette.Red, Color.white, Close, 26);
             close.GetComponent<RectTransform>().At(new Vector2(1, 1), Vector2.zero, new Vector2(120, 60), new Vector2(1, 1));
         }
@@ -247,6 +254,67 @@ namespace CSER
         }
 
 
+        void BuildNotes()
+        {
+            var entries = new List<LearningPoint>();
+            foreach (var task in GameManager.I.Chapter.tasks)
+                if (GameData.HasPoint(task.id)) entries.Add(GameData.Point(task.id));
+            int pages = Mathf.Max(1, (entries.Count + 3) / 4);
+            notesPage = Mathf.Clamp(notesPage, 0, pages - 1);
+            var title = UIKit.Text(tabBody, "Notes collected during this chapter", 26, Palette.Ink, TextAlignmentOptions.TopLeft, FontStyles.Bold);
+            title.rectTransform.Top(45);
+            for (int cell = 0; cell < 4; cell++)
+            {
+                int index = notesPage * 4 + cell;
+                if (index >= entries.Count) break;
+                var entry = entries[index];
+                bool unlocked = StoryProgress.HasPoint(entry.task);
+                var card = UIKit.Panel(tabBody, "Note", Palette.CardTint);
+                card.rectTransform.At(new Vector2(0, 1), new Vector2(cell % 2 * 475, -55 - cell / 2 * 163), new Vector2(455, 151), new Vector2(0, 1));
+                var text = UIKit.Text(card.transform, unlocked ? "<b>" + entry.title + "</b>\n" + entry.text : "<b>Not collected yet</b>\nComplete the related objective to add this note.", 22, unlocked ? Palette.Ink : Palette.InkSoft);
+                text.rectTransform.Fill(16, 16, 12, 12);
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 17;
+                text.fontSizeMax = 22;
+            }
+            var previous = UIKit.Button(tabBody, "Previous", Palette.CardTint, Palette.Ink, () => { notesPage--; Rebuild(); }, 24);
+            previous.interactable = notesPage > 0;
+            previous.GetComponent<RectTransform>().At(Vector2.zero, new Vector2(0, 8), new Vector2(220, 60), Vector2.zero);
+            var pageLabel = UIKit.Text(tabBody, (notesPage + 1) + " / " + pages, 25, Palette.Ink, TextAlignmentOptions.Center);
+            pageLabel.rectTransform.At(new Vector2(.5f, 0), new Vector2(0, 8), new Vector2(180, 60), new Vector2(.5f, 0));
+            var next = UIKit.Button(tabBody, "Next", Palette.CardTint, Palette.Ink, () => { notesPage++; Rebuild(); }, 24);
+            next.interactable = notesPage + 1 < pages;
+            next.GetComponent<RectTransform>().At(new Vector2(1, 0), new Vector2(0, 8), new Vector2(220, 60), new Vector2(1, 0));
+        }
+
+        void BuildSettings()
+        {
+            int row = 0;
+            Setting(row++, "Room ambience", Sfx.AmbienceOn, value => Sfx.I?.SetAmbience(value));
+            Setting(row++, "Radio voice", Narrator.VoiceEnabled, value => Narrator.VoiceEnabled = value);
+            Setting(row++, "Guide marker", Guide.Enabled, value => Guide.Enabled = value);
+            Setting(row++, "Reduce flashing", AlertStateManager.I && AlertStateManager.I.ReduceFlashing, value =>
+            {
+                if (AlertStateManager.I) AlertStateManager.I.ReduceFlashing = value;
+                PlayerPrefs.Save();
+            });
+            if (GameManager.I.HasTimer)
+                Setting(row++, "Experienced mode\n<size=17>Changing this restarts the chapter</size>", GameManager.Experienced, value => GameManager.I.SetDifficulty(value));
+            var tip = UIKit.Text(tabBody, "Teleport remains available when using the maintenance rail.", 20, Palette.InkSoft);
+            tip.rectTransform.At(new Vector2(0, 1), new Vector2(0, -row * 72), new Vector2(920, 50), new Vector2(0, 1));
+        }
+
+        void Setting(int row, string label, bool enabled, System.Action<bool> change)
+        {
+            float y = -row * 72;
+            var text = UIKit.Text(tabBody, label, 25, Palette.Ink, TextAlignmentOptions.MidlineLeft);
+            text.rectTransform.At(new Vector2(0, 1), new Vector2(0, y), new Vector2(480, 64), new Vector2(0, 1));
+            var on = UIKit.Button(tabBody, "On", enabled ? Palette.Blue : Palette.CardTint, enabled ? Color.white : Palette.Ink, () => { change(true); Rebuild(); }, 24);
+            on.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(520, y), new Vector2(170, 58), new Vector2(0, 1));
+            var off = UIKit.Button(tabBody, "Off", !enabled ? Palette.Blue : Palette.CardTint, !enabled ? Color.white : Palette.Ink, () => { change(false); Rebuild(); }, 24);
+            off.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(710, y), new Vector2(170, 58), new Vector2(0, 1));
+        }
+
         static readonly Color McGrey = new Color32(198, 198, 198, 255);
         static readonly Color McSlot = new Color32(139, 139, 139, 255);
         static readonly Color McDark = new Color32(55, 55, 55, 255);
@@ -261,6 +329,7 @@ namespace CSER
         {
             var inv = Inventory.I;
             var sb = new System.Text.StringBuilder();
+            sb.Append(GameManager.I ? GameManager.I.DoneCount : 0).Append('|');
             if (inv != null)
             {
                 foreach (var g in inv.Slots) sb.Append(g.name).Append(',');

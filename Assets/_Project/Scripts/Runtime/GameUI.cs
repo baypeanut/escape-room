@@ -26,7 +26,7 @@ namespace CSER
         TMP_Text objectiveText;
         int menuTab;
         bool menuOpen;
-        public bool MenuOpen => menuOpen;
+        public bool MenuOpen => menuOpen || (Hub.I && Hub.I.IsOpen);
 
 
         void OnDestroy() { if (I == this) I = null; }

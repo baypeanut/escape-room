@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 namespace CSER
@@ -38,19 +39,31 @@ namespace CSER
             public int hints, mistakes;
         }
 
-        public static Result Get(int chapter)
+        public static Result Get(int chapter) => Parse(PlayerPrefs.GetString(KeyResult + chapter, ""));
+
+        public static Result GetLatest(int chapter) => Parse(PlayerPrefs.GetString(KeyResult + chapter + ".latest", ""));
+
+        static Result Parse(string value)
         {
-            var s = PlayerPrefs.GetString(KeyResult + chapter, "");
-            var p = s.Split(';');
-            if (p.Length != 3) return default;
-            return new Result { done = true, seconds = float.Parse(p[0], System.Globalization.CultureInfo.InvariantCulture), hints = int.Parse(p[1]), mistakes = int.Parse(p[2]) };
+            var parts = value.Split(';');
+            if (parts.Length != 3
+                || !float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float seconds)
+                || float.IsNaN(seconds) || float.IsInfinity(seconds) || seconds < 0
+                || !int.TryParse(parts[1], out int hints) || hints < 0
+                || !int.TryParse(parts[2], out int mistakes) || mistakes < 0) return default;
+            return new Result { done = true, seconds = seconds, hints = hints, mistakes = mistakes };
         }
 
         public static void Complete(int chapter, float seconds, int hints, int mistakes)
         {
+            if (chapter < 1 || chapter > GameData.Chapters.Length || float.IsNaN(seconds)
+                || float.IsInfinity(seconds) || seconds < 0 || hints < 0 || mistakes < 0) return;
             var prev = Get(chapter);
-            if (!prev.done || seconds < prev.seconds)
-                PlayerPrefs.SetString(KeyResult + chapter, string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0};{1};{2}", seconds, hints, mistakes));
+            string record = string.Format(CultureInfo.InvariantCulture, "{0};{1};{2}", seconds, hints, mistakes);
+            PlayerPrefs.SetString(KeyResult + chapter + ".latest", record);
+            if (!prev.done || seconds < prev.seconds
+                || (Mathf.Approximately(seconds, prev.seconds) && hints + mistakes < prev.hints + prev.mistakes))
+                PlayerPrefs.SetString(KeyResult + chapter, record);
             if (chapter + 1 > UnlockedChapter) PlayerPrefs.SetInt(KeyUnlocked, Mathf.Min(chapter + 1, GameData.Chapters.Length));
             PlayerPrefs.Save();
         }
@@ -61,7 +74,11 @@ namespace CSER
         {
             PlayerPrefs.DeleteKey(KeyUnlocked);
             PlayerPrefs.DeleteKey(KeyPoints);
-            for (int i = 1; i <= GameData.Chapters.Length; i++) PlayerPrefs.DeleteKey(KeyResult + i);
+            for (int i = 1; i <= GameData.Chapters.Length; i++)
+            {
+                PlayerPrefs.DeleteKey(KeyResult + i);
+                PlayerPrefs.DeleteKey(KeyResult + i + ".latest");
+            }
             PlayerPrefs.Save();
         }
     }

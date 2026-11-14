@@ -21,7 +21,7 @@ namespace CSER.EditorTools
         const string ActiveKey = "Northwind.Validation.Active";
         const string ReportKey = "Northwind.Validation.Report";
         const string ExitKey = "Northwind.Validation.Exit";
-        static readonly string[] SaveKeys = { "cser.unlocked", "cser.points", "cser.result.1", "cser.result.2", "cser.result.3" };
+        static readonly string[] SaveKeys = { "cser.unlocked", "cser.points", "cser.result.1", "cser.result.2", "cser.result.3", "cser.result.1.latest", "cser.result.2.latest", "cser.result.3.latest" };
         static readonly Stack<IEnumerator> Steps = new Stack<IEnumerator>();
         static readonly List<string> RuntimeErrors = new List<string>();
         static double deadline;

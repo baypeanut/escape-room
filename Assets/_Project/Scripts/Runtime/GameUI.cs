@@ -26,7 +26,6 @@ namespace CSER
         TMP_Text objectiveText;
         int menuTab;
         bool menuOpen;
-        int hintTierShown;
         public bool MenuOpen => menuOpen;
 
 
@@ -270,19 +269,19 @@ namespace CSER
 
         void ShowCertificate()
         {
-            var body = NewCard("Certificate of Completion", Palette.Mint, new Vector2(1100, 760));
+            var body = NewCard("Incident review", Palette.Mint, new Vector2(1100, 760));
             float time = 0; int hints = 0, mistakes = 0;
             for (int i = 1; i <= GameData.Chapters.Length; i++)
             {
-                var r = StoryProgress.Get(i);
+                var r = RunState.Get(i);
                 time += r.seconds; hints += r.hints; mistakes += r.mistakes;
             }
 
 
-            if (RunState.Running) time = RunState.Seconds;
+            bool fullStory = RunState.CompletedChapters == GameData.Chapters.Length;
             string rank = hints <= 3 && mistakes <= 3 ? "Elite Defender" : hints <= 9 ? "Senior Analyst" : "Analyst";
             var t = UIKit.Text(body,
-                "<size=32>Congratulations! This certifies that you</size>\n<size=54><b>contained the midnight incident</b></size>\n<size=24><color=#5A6372>" + GameData.Chapters[GameData.Chapters.Length - 1].outro.Replace("\n\n", " ") + "</color></size>",
+                (fullStory ? "<size=54><b>Midnight incident contained</b></size>" : "<size=54><b>Server room cleared</b></size>") + "\n<size=24><color=#5A6372>" + GameData.Chapters[GameData.Chapters.Length - 1].outro.Replace("\n\n", " ") + "</color></size>",
                 30, Palette.Ink, TextAlignmentOptions.Center);
             t.rectTransform.Top(200);
             t.enableAutoSizing = true;
@@ -291,11 +290,12 @@ namespace CSER
             var stats = UIKit.Panel(body, "Stats", Palette.CardTint);
             stats.rectTransform.Top(290, 205, 40, 40);
             var sb = new System.Text.StringBuilder();
-            sb.Append($"<size=42>TOTAL TIME  <b>{GameManager.FormatTime(time)}</b></size>\n");
-            sb.Append($"Rank  <b>{rank}</b>      Learning points  <b>{StoryProgress.PointCount} / {GameData.Points.Length}</b>\nHints  <b>{hints}</b>      Mistakes  <b>{mistakes}</b>\n");
+            sb.Append($"<size=42>COMPLETED CHAPTER TIME  <b>{GameManager.FormatTime(time)}</b></size>\n");
+            sb.Append($"{(fullStory ? "Story rank" : "Session rank")}  <b>{rank}</b>      Learning points  <b>{StoryProgress.PointCount} / {GameData.Points.Length}</b>\nHints  <b>{hints}</b>      Mistakes  <b>{mistakes}</b>\n");
             for (int i = 1; i <= GameData.Chapters.Length; i++)
             {
-                var r = StoryProgress.Get(i);
+                var r = RunState.Get(i);
+                if (!r.done) { sb.Append($"<size=80%>Chapter {i}: not completed in this session</size>\n"); continue; }
                 sb.Append($"<size=80%><color=#5A6372>Chapter {i} - {GameData.Chapters[i - 1].title}:</color>  {GameManager.FormatTime(r.seconds)}   hints {r.hints}   mistakes {r.mistakes}</size>\n");
             }
             var s = UIKit.Text(stats.transform, sb.ToString(), 28, Palette.Ink, TextAlignmentOptions.Center);
@@ -360,7 +360,6 @@ namespace CSER
             if (wristObjective) wristObjective.text = $"<size=70%><color=#2FBF85>OBJECTIVE {index}/{total}</color></size>\n{label}";
 
             notifier?.Show($"Objective {index} / {total}", label, Palette.Mint, 6f);
-            hintTierShown = 0;
         }
 
         void BuildWrist()

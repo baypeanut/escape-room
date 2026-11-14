@@ -168,6 +168,7 @@ namespace CSER
 
         void Win()
         {
+            RunState.Record(chapter, Elapsed, HintsUsed, Mistakes);
             StoryProgress.Complete(chapter, Elapsed, HintsUsed, Mistakes);
             SetState(GameState.Won);
             Sfx.Play(Sfx.I ? Sfx.I.win : null);

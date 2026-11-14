@@ -20,6 +20,16 @@ namespace CSER
         Coroutine running;
 
         public bool Speaking => running != null;
+        public static bool VoiceEnabled
+        {
+            get => PlayerPrefs.GetInt("midnight.voice", 0) == 1;
+            set
+            {
+                PlayerPrefs.SetInt("midnight.voice", value ? 1 : 0);
+                PlayerPrefs.Save();
+                if (I && I.voice) I.voice.mute = !value;
+            }
+        }
         public event Action GroupFinished;
 
 
@@ -32,6 +42,7 @@ namespace CSER
             voice.playOnAwake = false;
             voice.spatialBlend = 0;
             voice.volume = 1f;
+            voice.mute = !VoiceEnabled;
             var json = Resources.Load<TextAsset>("VO/narration");
             if (!json) return;
             foreach (var l in JsonUtility.FromJson<LineList>(json.text).lines)

@@ -1,0 +1,13 @@
+Midnight Lockdown | Assignment 6 implementation
+
+Environment: Night Shift, Fred's Office and The Server Room are all in the story. The story uses furnished rooms with materials, props and colliders.
+
+Custom shader and particles: Fred's Office and The Server Room each contain a NorthwindContainmentDisplay. The core material uses NorthwindContainment.shader. Each display has a Unity ParticleSystem using NorthwindSignalMote.shader. The office display resolves when the USB is quarantined. The server display resolves when the port is isolated.
+
+Required puzzles: The office requires sorting evidence and quarantining objects, using room clues and a physical token to secure the account, and correctly classifying six emails. The terminal action and keypad are gated by the prerequisites. A correct code by itself will not open the exit.
+
+Game states: The intro leads to play, which ends in a win or loss. Retry loads a fresh run. The office expires after 10 minutes in Normal or 8 minutes in Experienced unless changed on the office GameManager. The final success card appears after the server room objectives are done.
+
+Movement and feedback: The Quest rig supports headset tracking, controller teleport and turning. Audio and controller vibration provide feedback when selecting and completing tasks. Confirm both on a headset, along with reach and comfort.
+
+Submission material: README.txt explains setup and testing. SOURCES.txt keeps the original project and imported assets traceable. SUBMISSION.txt lists the video shots and remaining team materials. Tests in the editor check scene references and game logic; they cannot establish controller tracking, in-headset appearance, frame rate or the experience of a human player.

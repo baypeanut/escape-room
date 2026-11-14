@@ -1,0 +1,13 @@
+Assignment 6 | Midnight Lockdown
+
+Source location: https://github.com/baypeanut/escape-room
+The MidnightLockdown project folder in this archive is a local copy. README.txt has the setup and test steps. SOURCES.txt lists the game and the other sources used.
+
+Video to record on the submission build
+Start in the control room and show moving with a controller. In the office show a rejected item, a successful physical task, correcting an inbox decision, and reading the code at the board. Frame the containment beacon so its shader and particles are visible. Show the correct keypad entry and the server-room conclusion. Record a separate short clip of the timer expiring and retrying. Include footage of a person playing. A side-by-side headset capture and player view can make the interactions easier to see.
+
+Design reflection prompts
+Why make the player use room clues and physical objects to find answers? What changed when the countdown was shortened? How do sounds and the containment signal tell the player when an action matters? Explain what the team implemented, what came from the original project, and what the headset test showed.
+
+Still to supply
+The team's own gameplay and reflection video link, plus the separate course Peer Assessment from each human team member.

@@ -1,120 +1,165 @@
+using System.Collections.Generic;
+using Oculus.Interaction.Locomotion;
 using UnityEngine;
 
 namespace CSER
 {
-
-
     public class PlayerBlocker : MonoBehaviour
     {
-        public float radius = 0.22f;
-        [Tooltip("Bottom of the body capsule above the floor (its rounded end reaches radius lower): low enough for bins and boxes")]
+        [Min(0.1f)] public float radius = 0.22f;
         public float kneeHeight = 0.3f;
+        public bool comfortFade = true;
+        [Min(0.02f)] public float eyeRadius = 0.06f;
+        public bool protectTeleport = true;
 
         OVRCameraRig rig;
-        CapsuleCollider probe;
         Transform env, props;
-        readonly Collider[] hits = new Collider[64];
+        readonly Collider[] overlaps = new Collider[96];
+        readonly RaycastHit[] rayHits = new RaycastHit[96];
+        readonly List<DestinationFilter> filters = new List<DestinationFilter>();
+        float insideFor, hintCooldown;
+        bool started;
+
+        sealed class DestinationFilter
+        {
+            public TeleportInteractor interactor;
+            public TeleportInteractor.AcceptDestinationComputer previous;
+            public TeleportInteractor.AcceptDestinationComputer installed;
+        }
+
+        public bool Dimmed => comfortFade && insideFor > 0.1f;
+        public int ProtectedTeleportInteractors => filters.Count;
 
         void Start()
         {
             rig = GetComponent<OVRCameraRig>();
-            var go = new GameObject("PlayerBlockerProbe") { layer = 2 };
-            probe = go.AddComponent<CapsuleCollider>();
-            probe.isTrigger = true;
-            probe.radius = radius;
-            probe.direction = 1;
-            var e = GameObject.Find("Environment");
-            env = e ? e.transform : null;
-            var pr = GameObject.Find("Props");
-            props = pr ? pr.transform : null;
+            var environment = GameObject.Find("Environment");
+            var furniture = GameObject.Find("Props");
+            env = environment ? environment.transform : null;
+            props = furniture ? furniture.transform : null;
+            started = true;
+            InstallFilters();
         }
 
-
-        bool Blocks(Collider c)
+        void OnEnable()
         {
-            if (!c || c.isTrigger || c.transform.IsChildOf(rig.transform)) return false;
-            if (!c.transform.IsChildOf(env) && !(props && c.transform.IsChildOf(props))) return false;
-            if (c is MeshCollider mc && !mc.convex) return false;
-            if (c.GetComponentInParent<GrabItem>()) return false;
-            return !(c.attachedRigidbody && !c.attachedRigidbody.isKinematic);
+            if (started) InstallFilters();
         }
+
+        void OnDisable()
+        {
+            foreach (var filter in filters)
+                if (filter.interactor && filter.interactor.AcceptDestination == filter.installed)
+                    filter.interactor.AcceptDestination = filter.previous;
+            filters.Clear();
+            insideFor = 0f;
+            if (Fader.I) Fader.I.SetComfort(0f);
+        }
+
+        void InstallFilters()
+        {
+            if (!rig || filters.Count > 0) return;
+            foreach (var interactor in FindObjectsByType<TeleportInteractor>(FindObjectsInactive.Include))
+            {
+                var filter = new DestinationFilter { interactor = interactor, previous = interactor.AcceptDestination };
+                filter.installed = (target, pose) =>
+                    (filter.previous == null || filter.previous(target, pose)) &&
+                    (!protectTeleport || AcceptDestination(filter.interactor, target, pose));
+                interactor.AcceptDestination = filter.installed;
+                filters.Add(filter);
+            }
+        }
+
+        bool Blocks(Collider collider)
+        {
+            if (!collider || !collider.enabled || collider.isTrigger) return false;
+            if (rig && collider.transform.IsChildOf(rig.transform)) return false;
+            if (!(env && collider.transform.IsChildOf(env)) && !(props && collider.transform.IsChildOf(props))) return false;
+            if (collider.GetComponentInParent<GrabItem>()) return false;
+            return !collider.attachedRigidbody || collider.attachedRigidbody.isKinematic;
+        }
+
+        float StandingHeight => rig && rig.centerEyeAnchor
+            ? Mathf.Clamp(rig.centerEyeAnchor.position.y - rig.transform.position.y + 0.1f, 0.65f, 2.6f)
+            : 1.75f;
+
+        bool AcceptDestination(TeleportInteractor interactor, TeleportInteractable target, Pose pose)
+        {
+            Vector3 feet = pose.position;
+            if (target.EyeLevel) feet.y -= StandingHeight - 0.1f;
+            if (!IsDestinationClear(feet)) return false;
+            var arc = interactor.TeleportArc;
+            if (arc == null) return false;
+            for (int i = 1; i < arc.PointsCount; i++)
+            {
+                Vector3 from = arc.PointAtIndex(i - 1);
+                Vector3 to = arc.PointAtIndex(i);
+                Vector3 segment = to - from;
+                float along = segment.sqrMagnitude > 0.000001f
+                    ? Vector3.Dot(interactor.ArcEnd.Point - from, segment) / segment.sqrMagnitude : -1f;
+                bool reached = along >= 0f && along <= 1.01f &&
+                    (from + segment * along - interactor.ArcEnd.Point).sqrMagnitude < 0.0025f;
+                if (reached) to = interactor.ArcEnd.Point;
+                if (!IsPathClear(from, to)) return false;
+                if (reached) break;
+            }
+            return true;
+        }
+
+        public bool IsDestinationClear(Vector3 feet)
+        {
+            if (!IsFinite(feet) || (!env && !props)) return false;
+            float capsuleRadius = Mathf.Max(0.1f, radius);
+            Vector3 bottom = feet + Vector3.up * (capsuleRadius + 0.025f);
+            Vector3 top = feet + Vector3.up * Mathf.Max(capsuleRadius + 0.025f, StandingHeight - capsuleRadius);
+            int count = Physics.OverlapCapsuleNonAlloc(bottom, top, capsuleRadius, overlaps, ~0, QueryTriggerInteraction.Ignore);
+            if (count == overlaps.Length) return false;
+            for (int i = 0; i < count; i++)
+                if (Blocks(overlaps[i])) return false;
+
+            count = Physics.RaycastNonAlloc(feet + Vector3.up * 0.15f, Vector3.down, rayHits, 0.35f, ~0, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < count; i++)
+                if (Blocks(rayHits[i].collider) && rayHits[i].normal.y >= 0.7f) return true;
+            return false;
+        }
+
+        public bool IsPathClear(Vector3 from, Vector3 to)
+        {
+            Vector3 delta = to - from;
+            float distance = delta.magnitude;
+            if (distance < 0.001f) return true;
+            int count = Physics.RaycastNonAlloc(from, delta / distance, rayHits, distance, ~0, QueryTriggerInteraction.Ignore);
+            if (count == rayHits.Length) return false;
+            for (int i = 0; i < count; i++)
+            {
+                var collider = rayHits[i].collider;
+                if (Blocks(collider) && collider.bounds.size.y > 0.25f) return false;
+            }
+            return true;
+        }
+
+        static bool IsFinite(Vector3 value) =>
+            !float.IsNaN(value.x) && !float.IsInfinity(value.x) &&
+            !float.IsNaN(value.y) && !float.IsInfinity(value.y) &&
+            !float.IsNaN(value.z) && !float.IsInfinity(value.z);
 
         void LateUpdate()
         {
-            if (!rig || !probe || !env || !rig.centerEyeAnchor) return;
-            Vector3 head = rig.centerEyeAnchor.position;
-            float floor = rig.transform.position.y;
-
-
-            var sp = rig.GetComponent<StartPose>();
-            if (sp && (head.y < floor - 2f || new Vector2(head.x - sp.position.x, head.z - sp.position.z).magnitude > 12f))
-            {
-                rig.transform.SetPositionAndRotation(sp.position, Quaternion.Euler(0, sp.yaw, 0));
-                return;
-            }
-
-            float bottom = floor + kneeHeight, top = Mathf.Max(bottom + 0.3f, head.y - 0.1f);
-            probe.height = top - bottom + radius * 2f;
-            probe.transform.position = new Vector3(head.x, (top + bottom) * 0.5f, head.z);
-            probe.transform.rotation = Quaternion.identity;
-
-            Vector3 push = Vector3.zero;
-            for (int iter = 0; iter < 4; iter++)
-            {
-                Vector3 p = probe.transform.position + push;
-                var up = Vector3.up * (probe.height * 0.5f - radius);
-                int n = Physics.OverlapCapsuleNonAlloc(p + up, p - up, radius, hits, ~0, QueryTriggerInteraction.Ignore);
-                bool moved = false;
-                for (int i = 0; i < n; i++)
-                {
-                    var c = hits[i];
-                    if (!Blocks(c)) continue;
-                    if (Physics.ComputePenetration(probe, p, Quaternion.identity, c, c.transform.position, c.transform.rotation, out var dir, out var dist))
-                    {
-                        dir.y = 0;
-                        if (dir.sqrMagnitude < 1e-6f) continue;
-                        push += dir.normalized * (dist + 0.005f);
-                        moved = true;
-                        p = probe.transform.position + push;
-                    }
-                }
-                if (!moved) break;
-            }
-            if (push.sqrMagnitude > 1e-8f && !DebugNoPush) rig.transform.position += push;
-            ComfortCheck();
-        }
-
-        [Tooltip("Dim the view (never full black) with a 'step back' hint while the eyes are inside geometry")]
-        public bool comfortFade = true;
-        [Tooltip("Eye sphere radius for the comfort check; small so standing next to a wall never triggers it")]
-        public float eyeRadius = 0.06f;
-        float insideFor, hintCooldown;
-        public bool Dimmed => insideFor > 0.1f;
-
-        public static bool DebugNoPush;
-
-
-        void ComfortCheck()
-        {
-            if (!comfortFade || !Fader.I) return;
-            Vector3 eye = rig.centerEyeAnchor.position;
+            if (!rig || !rig.centerEyeAnchor) return;
             bool inside = false;
-            int n = Physics.OverlapSphereNonAlloc(eye, eyeRadius, hits, ~0, QueryTriggerInteraction.Ignore);
-            for (int i = 0; i < n; i++)
+            if (comfortFade)
             {
-                var c = hits[i];
-                if (!Blocks(c) || !c.transform.IsChildOf(env) || c.bounds.size.y < 2f) continue;
-                inside = true;
-                break;
+                int count = Physics.OverlapSphereNonAlloc(rig.centerEyeAnchor.position, eyeRadius, overlaps, ~0, QueryTriggerInteraction.Ignore);
+                for (int i = 0; i < count; i++)
+                    if (Blocks(overlaps[i])) { inside = true; break; }
             }
-            insideFor = inside ? insideFor + Time.unscaledDeltaTime : 0;
-            bool dim = insideFor > 0.1f;
-            Fader.I.SetComfort(dim ? 0.7f : 0f);
-            if (hintCooldown > 0) hintCooldown -= Time.unscaledDeltaTime;
-            if (dim && hintCooldown <= 0)
+            insideFor = inside ? insideFor + Time.unscaledDeltaTime : 0f;
+            if (Fader.I) Fader.I.SetComfort(Dimmed ? 0.7f : 0f);
+            hintCooldown = Mathf.Max(0f, hintCooldown - Time.unscaledDeltaTime);
+            if (Dimmed && hintCooldown <= 0f)
             {
                 hintCooldown = 6f;
-                GameUI.I?.Caption("Step back - you're inside a wall", Palette.Ink);
+                GameUI.I?.Caption("Move your head back into the clear space", Palette.Ink);
             }
         }
     }

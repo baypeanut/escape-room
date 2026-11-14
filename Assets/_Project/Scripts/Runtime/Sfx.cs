@@ -13,9 +13,20 @@ namespace CSER
         AudioSource ui;
         AudioSource ambience;
         public static bool AmbienceOn = true;
+        float hapticUntil;
+        OVRInput.Controller hapticControllers;
+        public bool HapticsActive { get; private set; }
 
 
-        void OnDestroy() { if (I == this) I = null; }
+        void OnDestroy() { StopHaptics(); if (I == this) I = null; }
+        void OnDisable() => StopHaptics();
+        void OnApplicationPause(bool paused) { if (paused) StopHaptics(); }
+        void OnApplicationFocus(bool focused) { if (!focused) StopHaptics(); }
+
+        void Update()
+        {
+            if (HapticsActive && Time.unscaledTime >= hapticUntil) StopHaptics();
+        }
 
         void Awake()
         {
@@ -117,18 +128,23 @@ namespace CSER
         }
 
 
-        public static void Haptic(float strength = 0.4f, float seconds = 0.06f)
+        public static void Haptic(float strength = 0.4f, float seconds = 0.06f, OVRInput.Controller controllers = OVRInput.Controller.Touch)
         {
-            if (!I) return;
-            I.StopAllCoroutines();
-            I.StartCoroutine(I.HapticRoutine(strength, seconds));
+            if (!I || !I.isActiveAndEnabled) return;
+            I.StopHaptics();
+            if (strength <= 0f || seconds <= 0f) return;
+            I.hapticControllers = controllers;
+            I.hapticUntil = Time.unscaledTime + Mathf.Clamp(seconds, 0.01f, 1f);
+            I.HapticsActive = true;
+            OVRInput.SetControllerVibration(1f, Mathf.Clamp01(strength), controllers);
         }
 
-        System.Collections.IEnumerator HapticRoutine(float strength, float seconds)
+        public void StopHaptics()
         {
-            OVRInput.SetControllerVibration(1f, strength, OVRInput.Controller.Touch);
-            yield return new WaitForSeconds(seconds);
-            OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.Touch);
+            if (!HapticsActive) return;
+            OVRInput.SetControllerVibration(0f, 0f, hapticControllers);
+            HapticsActive = false;
+            hapticUntil = 0f;
         }
     }
 }

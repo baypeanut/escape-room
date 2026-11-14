@@ -177,6 +177,7 @@ namespace CSER
                 || parent.GetComponentInParent<DoorKeypad>();
             btn.onClick.AddListener(() =>
             {
+                if (!btn || !btn.isActiveAndEnabled || !btn.interactable) return;
                 if (gameplay && (!GameManager.I || GameManager.I.State != GameState.Playing)) return;
                 Sfx.Play(Sfx.I ? Sfx.I.click : null, 0.6f);
                 Sfx.Haptic(0.25f, 0.04f);
@@ -237,7 +238,12 @@ namespace CSER
 
         public static void Clear(Transform t)
         {
-            for (int i = t.childCount - 1; i >= 0; i--) UnityEngine.Object.Destroy(t.GetChild(i).gameObject);
+            for (int i = t.childCount - 1; i >= 0; i--)
+            {
+                var child = t.GetChild(i).gameObject;
+                child.SetActive(false);
+                UnityEngine.Object.Destroy(child);
+            }
         }
 
         public static VerticalLayoutGroup VLayout(GameObject go, float spacing, int pad = 0, TextAnchor align = TextAnchor.UpperLeft, bool expandWidth = true)

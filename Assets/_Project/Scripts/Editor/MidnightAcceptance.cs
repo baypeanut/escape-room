@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Oculus.Interaction;
+using Oculus.Interaction.HandGrab;
 using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -377,8 +378,15 @@ namespace CSER.EditorTools
             var report = consoles.Single(console => console.mode == OpsConsole.Mode.Report);
             var implant = Object.FindAnyObjectByType<RogueImplant>();
             var station = Object.FindAnyObjectByType<PatchRoutingStation>();
+            var response = Object.FindAnyObjectByType<MidnightRoomResponse>();
             Check(manager && implant && station && station.modules.Length == 3 && station.sockets.Length == 4,
                 "server saved scene includes implant and three-module recovery puzzle");
+            Check(response && response.ceilingPanels.Length > 0 && response.serviceLights.Length > 0,
+                "server saved scene includes the restoration light and panel references");
+            Check(response.ceilingPanels.All(panel => panel && panel.sharedMaterial && panel.sharedMaterial.IsKeywordEnabled("_EMISSION")),
+                "restoration panel materials retain their emission shader keyword after import");
+            Check(response.serviceLights.All(light => light && light.intensity < 0.05f),
+                "restoration service lights begin switched off");
             RequiredTaskChecks(manager);
             Check(manager.State == GameState.Intro && !NamedButton(backup.transform, "Backup0") && !NamedButton(report.transform, "Report0"),
                 "server operations wait for readiness");
@@ -417,6 +425,7 @@ namespace CSER.EditorTools
             Physics.SyncTransforms();
             Invoke(zoneTask.GetComponent<DropZone>(), "OnTriggerStay", ItemCollider(device));
             Check(manager.IsDone(TaskId.SRV_Bag) && device.Deposited, "released implant is secured through its evidence-zone actor");
+            SecuredTargetChecks(device);
             yield return RecoveryRoute(station, manager);
             Check(station.HasValidRoute() && !station.Solved && !manager.IsDone(TaskId.SRV_RouteBackup),
                 "a connected route cannot complete while the network port is still active");
@@ -426,6 +435,10 @@ namespace CSER.EditorTools
                 "port isolation permits the valid physical recovery route");
             Check(station.modules.All(module => module.Latched && module.item.Deposited && !module.item.CanStore),
                 "solved cartridges remain latched and cannot be stored or removed");
+            foreach (var module in station.modules) SecuredTargetChecks(module.item);
+            yield return Wait(1f);
+            Capture("acceptance_recovery_route", station.transform.position - station.transform.forward * 1.2f,
+                station.transform.rotation.eulerAngles);
             Check(!NamedButton(report.transform, "Report0"), "report remains unavailable before restoration");
             ClickNamed(backup.transform, "Backup1");
             Click(backup.transform, "Restore selected snapshot");
@@ -464,7 +477,39 @@ namespace CSER.EditorTools
             Check(review.Contains("Server room cleared") && review.Contains("Chapter 1: not completed in this session")
                 && review.Contains("Chapter 2: not completed in this session") && review.Contains("Session rank"),
                 "partial replay review labels its actual session scope");
+            yield return Wait(3f);
+            Check(response.serviceLights.All(light => light && light.intensity > 2f),
+                "successful restoration raises the service lights after the transition");
+            bool panelsEmitting = true;
+            var properties = new MaterialPropertyBlock();
+            foreach (var panel in response.ceilingPanels)
+            {
+                panel.GetPropertyBlock(properties);
+                panelsEmitting &= panel.sharedMaterial.IsKeywordEnabled("_EMISSION")
+                    && properties.GetColor(Shader.PropertyToID("_EmissionColor")).maxColorComponent > 0.4f;
+            }
+            Check(panelsEmitting, "restored ceiling panels have active emission with a nonzero material property value");
+            if (Environment.GetEnvironmentVariable("MIDNIGHT_ACCEPTANCE_CAPTURE") == "1")
+            {
+                torch.GetComponent<Flashlight>().Switch(false);
+                Append("EDITOR CAPTURE SETUP: mounted torch switched off for the environmental recovery preview after the restoration lights settled. This is a staged editor view.");
+            }
             Capture("acceptance_server_complete", new Vector3(3.3f, 2.7f, -2.3f), new Vector3(28, -60, 0));
+        }
+
+        static void SecuredTargetChecks(GrabItem item)
+        {
+            var targets = item.GetComponentsInChildren<MonoBehaviour>(true).Where(component => component is GrabInteractable
+                || component is DistanceGrabInteractable || component is HandGrabInteractable || component is DistanceHandGrabInteractable).ToArray();
+            Check(targets.Length > 0 && targets.All(target => !target.isActiveAndEnabled
+                && ((IInteractableView)target).State == InteractableState.Disabled),
+                item.name + " secured native grab targets are disabled in the SDK state machine");
+            var grabbables = item.GetComponentsInChildren<Grabbable>(true);
+            Check(grabbables.Length > 0 && grabbables.All(grabbable => !grabbable.isActiveAndEnabled),
+                item.name + " secured pointable grab actors are disabled");
+            var colliders = item.GetComponentsInChildren<Collider>(true);
+            Check(colliders.Length > 0 && colliders.All(collider => !collider.enabled),
+                item.name + " secured colliders cannot remain native hover or distance-grab targets");
         }
 
         static void FlashlightPoseChecks(GrabItem torch)
@@ -521,6 +566,7 @@ namespace CSER.EditorTools
             var backup = Object.FindObjectsByType<OpsConsole>(FindObjectsInactive.Exclude).Single(console => console.mode == OpsConsole.Mode.Backup);
             Check(manager.State == GameState.Playing && !NamedButton(backup.transform, "Backup0"),
                 "an alternate route still cannot bypass disconnection and evidence containment");
+            yield return Wait(1f);
             Capture("acceptance_recovery_alternate", station.transform.position - station.transform.forward * 1.2f,
                 station.transform.rotation.eulerAngles);
         }
@@ -585,8 +631,6 @@ namespace CSER.EditorTools
             Check(!station.HasValidRoute() && !manager.IsDone(TaskId.SRV_RouteBackup), "three cartridges with a broken or dangling route do not solve recovery");
             yield return Seat(station, elbows[0], 1, 2);
             Check(station.HasValidRoute(), "correct physical cartridge rotations form a connected route");
-            Capture("acceptance_recovery_route", station.transform.position + station.transform.forward * -1.2f,
-                station.transform.rotation.eulerAngles);
         }
 
         static IEnumerator Seat(PatchRoutingStation station, PatchModule module, int socket, int quarterTurns)

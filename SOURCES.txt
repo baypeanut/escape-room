@@ -5,6 +5,9 @@ Northwind AR/VR team (K068, K075 and K081), The Northwind Breach.
 The original game supplies the rooms, models built by its developers, puzzle and interface code, narrative, audio synthesis and narration recordings.
 The original team cited Cyber Security Escape Room Online as a design reference: https://cybersecurity-escaperoom.com/
 
+Changes in this edition
+The recovery-circuit panel, three rotatable cartridges, connection solver, maintenance rail and movement, recovery room response, containment shaders and particles are built in the project. The interaction, progression, result tracking, accessibility and menu revisions are also part of this edition. These additions use code and Unity geometry; no new stock models or generated images were imported.
+
 Models and environment
 Poly Haven assets (CC0): https://polyhaven.com/license
   classic_laptop: https://polyhaven.com/a/classic_laptop

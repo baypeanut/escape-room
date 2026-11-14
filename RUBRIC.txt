@@ -1,13 +1,27 @@
-Midnight Lockdown | Assignment 6 implementation
+Midnight Lockdown | Assignment 6 coverage
 
-Environment: Night Shift, Fred's Office and The Server Room are all in the story. The story uses furnished rooms with materials, props and colliders.
+This is a map of the implementation and its evidence, not a predicted grade.
 
-Custom shader and particles: Fred's Office and The Server Room each contain a NorthwindContainmentDisplay. The core material uses NorthwindContainment.shader. Each display has a Unity ParticleSystem using NorthwindSignalMote.shader. The office display resolves when the USB is quarantined. The server display resolves when the port is isolated.
+Virtual Environment
+Three furnished story rooms: security operations, an office and a server room. The rooms use textured objects, baked lighting, interactive drawers, doors, electronics and physical evidence. Authored containment displays and recovery-circuit conductors use custom shaders. The office and server room contain bounded particle systems tied to containment. New circuit hardware and maintenance rail add interactive geometry to the server room; completing recovery changes its environmental response.
+Evidence: saved scenes, scene-reference audit and editor screenshots. Both-eye appearance and actual headset performance still need a Quest test.
 
-Required puzzles: The office requires sorting evidence and quarantining objects, using room clues and a physical token to secure the account, and correctly classifying six emails. The terminal action and keypad are gated by the prerequisites. A correct code by itself will not open the exit.
+Puzzles
+Required tasks include interpreting logs, containing the infected laptop, sorting and preserving physical evidence, inferring a password from room clues, using a physical token, correcting six email decisions, identifying an impersonator, finding and disconnecting a hidden device, identifying its port, routing a physical circuit, selecting a clean backup and completing a report. The circuit checks adjacent connections and cartridge rotation, supports two valid routes and must use all three cartridges. The final keypad cannot bypass unfinished tasks.
+Evidence: state checks, actor UI tests, simulated placement/release and invalid-action tests. Controller manipulation still needs physical playtesting.
 
-Game states: The intro leads to play, which ends in a win or loss. Retry loads a fresh run. The office expires after 10 minutes in Normal or 8 minutes in Experienced unless changed on the office GameManager. The final success card appears after the server room objectives are done.
+Game
+The office countdown creates a loss condition. All mandatory chapter tasks are needed for a win. Retry resets the run. Hints, mistake counts, collected notes, chapter unlocks, historical best times and current-session results provide additional game systems. Old records are kept separate from the current attempt.
+Evidence: timeout, replay, score persistence and prerequisite tests.
 
-Movement and feedback: The Quest rig supports headset tracking, controller teleport and turning. Audio and controller vibration provide feedback when selecting and completing tasks. Confirm both on a headset, along with reach and comfort.
+Movement
+Teleport and turning work through the Quest rig. The optional server maintenance rail adds hand-driven travel: hold grip at the rail and pull along its axis. It stops on release and limits movement to the aisle. Teleport remains available. Physical head movement is not corrected by pushing the camera rig.
+Evidence: movement regression tests and saved rail geometry. Whether this earns the highest movement band is the instructor's judgment; rail comfort and tracking need Quest testing.
 
-Submission material: README.txt explains setup and testing. SOURCES.txt keeps the original project and imported assets traceable. SUBMISSION.txt lists the video shots and remaining team materials. Tests in the editor check scene references and game logic; they cannot establish controller tracking, in-headset appearance, frame rate or the experience of a human player.
+Presence
+Spatial sounds, ambient room audio, controller vibration, changing containment displays and the handheld flashlight connect player actions to the room. The recovery circuit gives local audio and tactile feedback. Reduced flashing is reachable in the live menu. Narration is optional, with captions retained.
+Evidence: runtime code and lifecycle tests. Actual vibration and spatial sound are headset checks.
+
+Documentation
+README.txt contains setup and controls. SOURCES.txt records outside resources. TESTING.txt supplies a headset test and a video shot list. SUBMISSION.txt contains the repository link. The archive includes the official blank Peer Assessment document for each team member to complete separately.
+Still required: the team's own video showing the game, design reflection and a person playing it; each member's completed assessment. Editor screenshots and automated tests do not replace these requirements.

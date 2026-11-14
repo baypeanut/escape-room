@@ -54,6 +54,7 @@ namespace CSER.EditorTools
             housingMaterial.SetColor("_BaseColor", new Color(0.065f, 0.095f, 0.12f));
             housingMaterial.SetFloat("_Metallic", 0.5f);
             housingMaterial.SetFloat("_Smoothness", 0.32f);
+            housingMaterial.globalIlluminationFlags = MaterialGlobalIlluminationFlags.BakedEmissive;
             housingMaterial.EnableKeyword("_EMISSION");
             housingMaterial.SetColor("_EmissionColor", new Color(0.018f, 0.025f, 0.035f));
             EditorUtility.SetDirty(housingMaterial);

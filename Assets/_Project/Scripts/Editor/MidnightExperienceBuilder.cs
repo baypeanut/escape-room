@@ -21,6 +21,22 @@ namespace CSER.EditorTools
         const string MeshFolder = "Assets/_Project/Models/Authored";
         static readonly string[] Scenes = { "Ch1_NightShift", "Ch2_FredsOffice", "Ch3_ServerRoom" };
 
+        [MenuItem("CSER/Assignment/Repair Authored Material Emission")]
+        public static void RepairMaterials()
+        {
+            if (!Directory.Exists(AssetFolder)) return;
+            foreach (string path in Directory.GetFiles(AssetFolder, "*.mat"))
+            {
+                var material = AssetDatabase.LoadAssetAtPath<Material>(path.Replace('\\', '/'));
+                if (!material || material.shader.name != "Universal Render Pipeline/Lit"
+                    || !material.HasProperty("_EmissionColor") || material.GetColor("_EmissionColor").maxColorComponent <= 0f) continue;
+                material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.BakedEmissive;
+                material.EnableKeyword("_EMISSION");
+                EditorUtility.SetDirty(material);
+            }
+            AssetDatabase.SaveAssets();
+        }
+
         [MenuItem("CSER/Assignment/Apply Experience Improvements")]
         public static void ApplyToSavedScenes()
         {
@@ -265,6 +281,7 @@ namespace CSER.EditorTools
             material.SetColor("_BaseColor", color);
             material.SetFloat("_Metallic", metallic);
             material.SetFloat("_Smoothness", 0.3f);
+            material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.BakedEmissive;
             material.EnableKeyword("_EMISSION");
             material.SetColor("_EmissionColor", color * 0.16f);
             EditorUtility.SetDirty(material);

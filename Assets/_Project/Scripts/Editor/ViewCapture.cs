@@ -37,6 +37,8 @@ namespace CSER.EditorTools
                 ("srv_start", new Vector3(2.55f, 1.6f, 0), new Vector3(8, -90, 0)),
                 ("srv_implant", new Vector3(-0.68f, 1.45f, -0.25f), new Vector3(18, 0, 0)),
                 ("srv_cart", new Vector3(2.4f, 1.5f, 0.3f), new Vector3(18, 5, 0)),
+                ("srv_patch", new Vector3(1f, 1.45f, -1.35f), new Vector3(8, 180, 0)),
+                ("srv_rail", new Vector3(1.5f, 1.45f, 0.2f), new Vector3(10, -90, 0)),
                 ("srv_overview", new Vector3(3.3f, 2.7f, -2.3f), new Vector3(28, -60, 0)),
             },
         };
@@ -73,9 +75,9 @@ namespace CSER.EditorTools
             cam.fieldOfView = fov;
             cam.nearClipPlane = 0.05f;
             cam.farClipPlane = 60f;
-            cam.stereoTargetEye = StereoTargetEyeMask.None;
             var data = UnityEngine.Rendering.Universal.CameraExtensions.GetUniversalAdditionalCameraData(cam);
             data.renderPostProcessing = true;
+            data.allowXRRendering = false;
             cam.allowHDR = true;
             cam.clearFlags = RenderSettings.skybox ? CameraClearFlags.Skybox : CameraClearFlags.SolidColor;
             cam.backgroundColor = new Color(0.05f, 0.06f, 0.08f);

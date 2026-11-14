@@ -13,7 +13,7 @@ namespace CSER
         public bool protectTeleport = true;
 
         OVRCameraRig rig;
-        Transform env, props;
+        Transform env, props, experience;
         readonly Collider[] overlaps = new Collider[96];
         readonly RaycastHit[] rayHits = new RaycastHit[96];
         readonly List<DestinationFilter> filters = new List<DestinationFilter>();
@@ -35,8 +35,10 @@ namespace CSER
             rig = GetComponent<OVRCameraRig>();
             var environment = GameObject.Find("Environment");
             var furniture = GameObject.Find("Props");
+            var additions = GameObject.Find("MidnightExperience");
             env = environment ? environment.transform : null;
             props = furniture ? furniture.transform : null;
+            experience = additions ? additions.transform : null;
             started = true;
             InstallFilters();
         }
@@ -74,7 +76,8 @@ namespace CSER
         {
             if (!collider || !collider.enabled || collider.isTrigger) return false;
             if (rig && collider.transform.IsChildOf(rig.transform)) return false;
-            if (!(env && collider.transform.IsChildOf(env)) && !(props && collider.transform.IsChildOf(props))) return false;
+            if (!(env && collider.transform.IsChildOf(env)) && !(props && collider.transform.IsChildOf(props)) &&
+                !(experience && collider.transform.IsChildOf(experience))) return false;
             if (collider.GetComponentInParent<GrabItem>()) return false;
             return !collider.attachedRigidbody || collider.attachedRigidbody.isKinematic;
         }
@@ -108,7 +111,7 @@ namespace CSER
 
         public bool IsDestinationClear(Vector3 feet)
         {
-            if (!IsFinite(feet) || (!env && !props)) return false;
+            if (!IsFinite(feet) || (!env && !props && !experience)) return false;
             float capsuleRadius = Mathf.Max(0.1f, radius);
             Vector3 bottom = feet + Vector3.up * (capsuleRadius + 0.025f);
             Vector3 top = feet + Vector3.up * Mathf.Max(capsuleRadius + 0.025f, StandingHeight - capsuleRadius);

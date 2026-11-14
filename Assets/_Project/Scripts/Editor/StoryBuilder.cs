@@ -64,6 +64,7 @@ namespace CSER.EditorTools
         static void FinishScene(Scene scene, string name, Transform head, bool bake)
         {
             NorthwindAtmosphereBuilder.BuildForScene(scene, name);
+            MidnightExperienceBuilder.BuildForScene(scene, name);
             PostProcessing(head);
             ProbesFor(roomExtents);
             MarkStatic(env);

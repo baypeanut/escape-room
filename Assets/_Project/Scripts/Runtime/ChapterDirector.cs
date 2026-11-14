@@ -100,7 +100,7 @@ namespace CSER
         void Update()
         {
             if (!GuideBeacon.I || !GameManager.I) return;
-            if (!guideEnabled || !Guide.Enabled || current == null || GameManager.I.State != GameState.Playing) { GuideBeacon.I.Hide(); return; }
+            if (!guideEnabled || !Guide.Enabled || (GameUI.I && GameUI.I.MenuOpen) || current == null || GameManager.I.State != GameState.Playing) { GuideBeacon.I.Hide(); return; }
             var step = Array.Find(steps, s => s.task == current.Value);
             if (step == null || Time.time - stepStart < step.revealDelay) { GuideBeacon.I.Hide(); return; }
             if (step.dropTarget)

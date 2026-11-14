@@ -20,6 +20,7 @@ namespace CSER
             Time.fixedDeltaTime = 1f / 72f;
             bool mobile = Application.platform == RuntimePlatform.Android;
             if (!mobile) return;
+            Quality.Set(Quality.Level);
             foreach (var cam in Object.FindObjectsByType<Camera>(FindObjectsInactive.Include))
                 if (cam.TryGetComponent<UniversalAdditionalCameraData>(out var data)) data.renderPostProcessing = false;
             OVRManager.foveatedRenderingLevel = OVRManager.FoveatedRenderingLevel.High;

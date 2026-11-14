@@ -625,7 +625,7 @@ namespace CSER
 
     public static class Quality
     {
-        public static int Level = 2;
+        public static int Level = 1;
         static readonly float[] Scales = { 0.8f, 1.0f, 1.2f };
 
         public static void Set(int level)

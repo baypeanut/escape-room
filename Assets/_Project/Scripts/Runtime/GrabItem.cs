@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Oculus.Interaction;
+using Oculus.Interaction.HandGrab;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -166,12 +167,14 @@ namespace CSER
             if (Deposited || Consumed) return;
             Deposited = true;
             ForceHeld = false;
+            wasHeld = false;
+            DisableSelection();
             var p = transform.position;
             var e = zone.extents * 0.6f;
             p = new Vector3(Mathf.Clamp(p.x, zone.center.x - e.x, zone.center.x + e.x), Mathf.Clamp(p.y, zone.center.y - e.y, zone.center.y + e.y), Mathf.Clamp(p.z, zone.center.z - e.z, zone.center.z + e.z));
             Teleport(p, transform.rotation);
             rb.isKinematic = true;
-            foreach (var g in grabbables) if (g) g.enabled = false;
+            rb.useGravity = false;
         }
 
         public void ResetHome()
@@ -222,14 +225,25 @@ namespace CSER
             Consumed = true;
             ForceHeld = false;
             wasHeld = false;
-            foreach (var g in grabbables) if (g) g.enabled = false;
+            DisableSelection();
             StartCoroutine(ConsumeRoutine(into, duration, sink));
+        }
+
+        void DisableSelection()
+        {
+            foreach (var behaviour in GetComponentsInChildren<MonoBehaviour>(true))
+                if (behaviour is GrabInteractable || behaviour is DistanceGrabInteractable ||
+                    behaviour is HandGrabInteractable || behaviour is DistanceHandGrabInteractable ||
+                    behaviour is SnapInteractor)
+                    behaviour.enabled = false;
+            foreach (var grabbable in grabbables) if (grabbable) grabbable.enabled = false;
+            foreach (var collider in GetComponentsInChildren<Collider>(true)) collider.enabled = false;
         }
 
         IEnumerator ConsumeRoutine(Transform into, float duration, float sink)
         {
             rb.isKinematic = true;
-            foreach (var c in GetComponentsInChildren<Collider>()) c.enabled = false;
+            rb.useGravity = false;
             Vector3 start = transform.position;
             Vector3 end = into ? into.position : start;
             Quaternion startRot = transform.rotation;

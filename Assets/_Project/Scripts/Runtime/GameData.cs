@@ -152,7 +152,7 @@ namespace CSER
                 {
                     T(TaskId.SRV_Flashlight, "Find a flashlight in the dark server room",
                         "The lights are out. Something near the entrance may help.", "Check the cart beside the door: a small torch is lying on it.",
-                        "Grab the flashlight from the cart on your right (press F to switch it on or off)."),
+                        "Grab the flashlight from the cart on your right. Click the right stick to switch it on or off."),
                     T(TaskId.SRV_Find, "Find the rogue device in the server racks",
                         "Walk along the racks. One device doesn't match the others.", "Look for a small box with a blinking red light in the middle rack.", "Point at the small box with the red LED and pull the trigger."),
                     T(TaskId.SRV_Unplug, "Pull out its network cable",

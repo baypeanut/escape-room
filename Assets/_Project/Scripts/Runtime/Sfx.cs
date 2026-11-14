@@ -70,7 +70,19 @@ namespace CSER
 
         public static void PlayAt(AudioClip clip, Vector3 pos, float volume = 1f)
         {
-            if (clip) AudioSource.PlayClipAtPoint(clip, pos, volume);
+            if (!clip) return;
+            var go = new GameObject("Sfx3D");
+            go.transform.position = pos;
+            var source = go.AddComponent<AudioSource>();
+            source.clip = clip;
+            source.volume = Mathf.Clamp01(volume);
+            source.spatialBlend = 1f;
+            source.spatialize = true;
+            source.rolloffMode = AudioRolloffMode.Linear;
+            source.minDistance = 0.35f;
+            source.maxDistance = 8f;
+            source.Play();
+            Object.Destroy(go, clip.length + 0.15f);
         }
 
         public void SetAmbience(bool on)

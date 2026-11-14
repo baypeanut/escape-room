@@ -20,6 +20,8 @@ namespace CSER.EditorTools
             if (!pipeline) throw new InvalidOperationException("The Quest render pipeline asset is missing.");
             GraphicsSettings.defaultRenderPipeline = pipeline;
             PlayerSettings.productName = "Midnight Lockdown";
+            PlayerSettings.bundleVersion = "0.2.0";
+            PlayerSettings.Android.bundleVersionCode = 2;
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, PackageId);
             PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;

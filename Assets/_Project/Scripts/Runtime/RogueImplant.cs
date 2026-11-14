@@ -68,9 +68,11 @@ namespace CSER
             }
         }
 
+#if UNITY_EDITOR
         public void DebugUnplug()
         {
             if (plug) plug.position = socket.position + Vector3.forward * 0.3f;
         }
+#endif
     }
 }

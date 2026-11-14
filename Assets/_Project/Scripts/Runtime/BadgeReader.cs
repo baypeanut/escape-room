@@ -75,10 +75,12 @@ namespace CSER
             if (next <= GameData.Chapters.Length) SceneFlow.LoadChapter(next);
         }
 
+#if UNITY_EDITOR
         public void DebugSwipe()
         {
             var badge = GameObject.Find("AccessBadge");
             if (badge) Touch(badge.GetComponentInChildren<Collider>());
         }
+#endif
     }
 }

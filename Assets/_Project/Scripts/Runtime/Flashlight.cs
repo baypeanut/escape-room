@@ -127,6 +127,8 @@ namespace CSER
             if (handGlow) handGlow.transform.localPosition = new Vector3(0, 0.05f, 0.18f);
         }
 
+#if UNITY_EDITOR
         public void DebugGrab() => OnGrab(item);
+#endif
     }
 }

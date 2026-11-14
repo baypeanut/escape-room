@@ -158,11 +158,13 @@ namespace CSER
             }
         }
 
+#if UNITY_EDITOR
         public void DebugAnswerAll()
         {
             var gm = GameManager.I;
             foreach (var t in new[] { TaskId.SOC_OpenAlert, TaskId.SOC_FindHost, TaskId.SOC_Classify, TaskId.SOC_Escalate }) gm.Complete(t);
         }
+#endif
     }
 
 

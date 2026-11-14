@@ -697,10 +697,12 @@ namespace CSER
         }
 
 
+#if UNITY_EDITOR
         public void DebugLogin() { if (mode == Mode.Login) { GameManager.I.Complete(TaskId.FredLogin); Show(Mode.ChangePassword); } }
         public void DebugType(string s) { foreach (char c in s) Type(c.ToString()); }
         public void DebugSubmit() => activeField?.onSubmit?.Invoke();
         public void DebugTab(int t) { tab = t; if (mode == Mode.Main) Rebuild(); }
         public void DebugMain() => Show(Mode.Main);
+#endif
     }
 }

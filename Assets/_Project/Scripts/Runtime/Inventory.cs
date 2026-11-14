@@ -294,6 +294,7 @@ namespace CSER
         }
 
 
+#if UNITY_EDITOR
         public string DebugStore(string objectName)
         {
             var go = GameObject.Find(objectName);
@@ -304,5 +305,6 @@ namespace CSER
         public void DebugTakeOut(int index) => TakeOut(index);
         public void DebugThrowOut(int index) => ThrowOut(index);
         public string DebugList() => $"{slots.Count}/{Capacity}: " + string.Join(", ", slots.ConvertAll(s => s.displayName));
+#endif
     }
 }

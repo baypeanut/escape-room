@@ -18,6 +18,7 @@ namespace CSER
         int question;
         float restore = -1;
         string feedback;
+        GameManager manager;
 
         static readonly string[] PortNames =
         {
@@ -38,7 +39,7 @@ namespace CSER
             ("1/3  How did the attacker first get into Fred's account?",
                 new[] { "Fred's weak, guessable password", "A broken firewall", "A power outage" }, 0, "The logs show a normal login with Fred's password: 'Fluffy2019!' was guessed."),
             ("2/3  What stopped the theft of Project AURORA?",
-                new[] { "Turning off the printer", "Encrypting AURORA and revoking the attacker's access", "Deleting Fred's emails" }, 1, "Encryption made the stolen data useless and revocation kicked the attacker out."),
+                new[] { "Turning off the printer", "Protecting AURORA and revoking the attacker's access", "Deleting Fred's emails" }, 1, "Revoking access stopped the transfer. Encryption protects the remaining files; it cannot erase copies already taken."),
             ("3/3  What should Northwind change first?",
                 new[] { "Nothing, it was bad luck", "Ban USB sticks only", "Awareness training and 2FA for everyone" }, 2, "Most of tonight's mistakes were human: training plus 2FA closes the biggest gaps."),
         };
@@ -46,9 +47,24 @@ namespace CSER
         void Start()
         {
             root = UIKit.ContentRoot(screen);
-            GameManager.I.TaskCompleted += _ => Rebuild();
+            manager = GameManager.I;
+            manager.TaskCompleted += OnTask;
+            manager.StateChanged += OnState;
             Rebuild();
         }
+
+        void OnDestroy()
+        {
+            if (!manager) return;
+            manager.TaskCompleted -= OnTask;
+            manager.StateChanged -= OnState;
+        }
+
+        void OnTask(TaskId task) => Rebuild();
+        void OnState(GameState state) => Rebuild();
+        bool Playing => manager && manager.State == GameState.Playing;
+        bool Contained => Playing && manager.IsDone(TaskId.SRV_Find) && manager.IsDone(TaskId.SRV_Unplug)
+            && manager.IsDone(TaskId.SRV_Bag) && manager.IsDone(TaskId.SRV_Isolate) && manager.IsDone(TaskId.SRV_RouteBackup);
 
         void Rebuild()
         {
@@ -62,6 +78,11 @@ namespace CSER
             t.rectTransform.Fill(28, 28, 0, 0);
             var body = UIKit.Rect(bg.transform, "Body");
             body.Fill(40, 40, 90, 60);
+            if (!Playing && manager.State != GameState.Won)
+            {
+                Done(body, manager.State == GameState.Intro ? "Choose BEGIN on the chapter card." : "This run has ended. Retry from the menu.");
+                return;
+            }
             switch (mode)
             {
                 case Mode.Switch: BuildSwitch(body); break;
@@ -91,7 +112,7 @@ namespace CSER
                 int idx = i;
                 bool unknown = PortNames[i] == "UNKNOWN";
                 var c = i == selectedPort ? Palette.Blue : unknown ? Palette.Orange : Palette.Hex("1F7A4D");
-                var b = UIKit.Button(body, (i + 1).ToString(), c, Color.white, () => { selectedPort = idx; feedback = null; Rebuild(); }, 28, "Port" + (i + 1));
+                var b = UIKit.Button(body, (i + 1).ToString(), c, Color.white, () => { if (!Playing) return; selectedPort = idx; feedback = null; Rebuild(); }, 28, "Port" + (i + 1));
                 b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2((i % 12) * 99, -50 - (i / 12) * 96), new Vector2(90, 86), new Vector2(0, 1));
             }
             if (selectedPort < 0) return;
@@ -104,6 +125,13 @@ namespace CSER
             it.rectTransform.Fill(24, 24, 16, 16);
             var q = UIKit.Button(body, "Move to QUARANTINE VLAN 999", Palette.Red, Color.white, () =>
             {
+                if (!Playing || manager.IsDone(TaskId.SRV_Isolate)) return;
+                if (!manager.IsDone(TaskId.SRV_Find))
+                {
+                    feedback = "Find and inspect the unknown device in the racks first.";
+                    Rebuild();
+                    return;
+                }
                 if (rogue) { feedback = null; GameManager.I.Complete(TaskId.SRV_Isolate); }
                 else
                 {
@@ -117,7 +145,12 @@ namespace CSER
 
         void BuildBackup(RectTransform body)
         {
-            if (GameManager.I.IsDone(TaskId.SRV_Restore)) { Done(body, "<b>srv-file-01 restored from the 00:00 snapshot</b>\nIntegrity verified. Users won't lose a byte."); return; }
+            if (GameManager.I.IsDone(TaskId.SRV_Restore)) { Done(body, "<b>srv-file-01 restored from the 00:00 snapshot</b>\nIntegrity verified. Changes after midnight need a separate review."); return; }
+            if (!Contained)
+            {
+                Done(body, "Bag the disconnected device, quarantine its port and connect the recovery circuit first.");
+                return;
+            }
             if (restore >= 0)
             {
                 Done(body, $"Restoring 00:00 snapshot...  <b>{restore * 100:0}%</b>");
@@ -129,12 +162,13 @@ namespace CSER
             {
                 int idx = i;
                 var bk = Backups[i];
-                var b = UIKit.Button(body, $"<b>{bk.name}</b>\n<size=20>{bk.detail}</size>", i == selectedBackup ? Palette.Blue : Palette.Hex("24426B"), Color.white, () => { selectedBackup = idx; feedback = null; Rebuild(); }, 26, "Backup" + i);
+                var b = UIKit.Button(body, $"<b>{bk.name}</b>\n<size=20>{bk.detail}</size>", i == selectedBackup ? Palette.Blue : Palette.Hex("24426B"), Color.white, () => { if (!Contained || restore >= 0) return; selectedBackup = idx; feedback = null; Rebuild(); }, 26, "Backup" + i);
                 b.GetComponent<RectTransform>().Top(130, 80 + i * 142, 0, 0);
             }
             if (selectedBackup < 0) return;
             var r = UIKit.Button(body, "Restore selected snapshot", Palette.Green, Color.white, () =>
             {
+                if (!Contained || restore >= 0 || manager.IsDone(TaskId.SRV_Restore)) return;
                 var bk = Backups[selectedBackup];
                 if (bk.correct) StartCoroutine(Restore());
                 else
@@ -151,6 +185,7 @@ namespace CSER
         {
             for (restore = 0; restore < 1; restore += Time.deltaTime / 3.5f)
             {
+                if (!Contained) { restore = -1; Rebuild(); yield break; }
                 if (Time.frameCount % 8 == 0) Rebuild();
                 yield return null;
             }
@@ -161,12 +196,13 @@ namespace CSER
         void BuildReport(RectTransform body)
         {
             if (GameManager.I.IsDone(TaskId.SRV_Report)) { Done(body, "<b>Report filed.</b>\nIncident INC-2026-1021 closed."); return; }
-            if (!GameManager.I.IsDone(TaskId.SRV_Restore))
+            if (!manager.AllContainedExcept(TaskId.SRV_Report))
             {
                 Done(body, "<color=#C9D6E8>Finish the containment and recovery steps before writing the report.</color>");
                 return;
             }
             var (q, options, correct, why) = Report[question];
+            int expectedQuestion = question;
             var h = UIKit.Text(body, "<b>" + q + "</b>", 30, Color.white);
             h.rectTransform.Top(90);
             for (int i = 0; i < options.Length; i++)
@@ -174,6 +210,7 @@ namespace CSER
                 int idx = i;
                 var b = UIKit.Button(body, options[i], Palette.Hex("24426B"), Color.white, () =>
                 {
+                    if (!Playing || question != expectedQuestion || !manager.AllContainedExcept(TaskId.SRV_Report)) return;
                     if (idx == correct)
                     {
                         feedback = null;
@@ -193,6 +230,7 @@ namespace CSER
             }
         }
 
+#if UNITY_EDITOR
         public void DebugSolve()
         {
             switch (mode)
@@ -202,5 +240,6 @@ namespace CSER
                 case Mode.Report: GameManager.I.Complete(TaskId.SRV_Report); break;
             }
         }
+#endif
     }
 }

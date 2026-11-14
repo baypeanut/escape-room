@@ -34,6 +34,7 @@ namespace CSER
         SRV_Flashlight,
 
         SOC_Malware,
+        SRV_RouteBackup,
     }
 
     public enum ItemKind { Prop, EvidencePrintout, EvidenceNote, Confidential, Recycle, USB, Token, Badge, Implant, Plug, Flashlight }
@@ -160,10 +161,12 @@ namespace CSER
                         "Forensics will want the device.", "The evidence bag is on the cart in the aisle.", "Grab the implant and drop it in the evidence bag."),
                     T(TaskId.SRV_Isolate, "Move the infected port to the quarantine VLAN",
                         "Use the switch console on the wall at the end of the aisle.", "The implant was on the port with the unknown device (Raspberry Pi).", "Select port 14 and press 'Move to QUARANTINE VLAN'."),
+                    T(TaskId.SRV_RouteBackup, "Connect the backup recovery circuit",
+                        "Find the recovery panel on the wall. Its three loose cartridges carry different paths.", "Rotate and place all three cartridges to join BACKUP to RECOVERY with no broken connection.", "Use the straight cartridge and both elbows. Release each flat against a socket; turn it a quarter-turn to change its path."),
                     T(TaskId.SRV_Restore, "Restore the file server from a clean backup",
                         "The backup console is on the laptop cart.", "The breach started at 01:58. Pick a backup from before that.", "Restore the 00:00 snapshot (verified clean)."),
                     T(TaskId.SRV_Report, "File the incident report",
-                        "The report terminal is next to the backup console.", "Think back: how did the attacker get in, and what stopped them?", "Answers: weak guessable password / encrypting AURORA + revoking access / training + 2FA for everyone."),
+                        "The report terminal is next to the backup console.", "Think back: how did the attacker get in, and what stopped them?", "Answers: weak guessable password / protecting AURORA + revoking access / training + 2FA for everyone."),
                 },
             },
         };
@@ -186,12 +189,13 @@ namespace CSER
             P(TaskId.Enable2FA, "Turn on two-factor authentication", "With 2FA a stolen password isn't enough: the attacker also needs your token or phone."),
             P(TaskId.PhishingTriage, "Spot the phish", "Look for spoofed domains, urgency, threats and unusual requests. When in doubt, report it."),
             P(TaskId.SocialEngineering, "Never share 2FA codes", "No real helpdesk will ask for your one-time code. Anyone who does is an attacker."),
-            P(TaskId.EncryptData, "Encrypt sensitive data", "Encrypted files are useless to a thief. Encrypt data at rest and revoke compromised sessions quickly."),
+            P(TaskId.EncryptData, "Protect data before it leaves", "Encryption protects files when the key stays private. Revoking access stops further transfers; neither action erases copies already stolen."),
             P(TaskId.SRV_Flashlight, "Be prepared", "Incident kits need basics like a torch, evidence bags and a contact list: during an outage or a breach the lights may be off."),
             P(TaskId.SRV_Find, "Guard the server room", "A rogue device plugged into a rack can bypass every firewall. Restrict and monitor physical access."),
             P(TaskId.SRV_Unplug, "Contain first", "Cut the attacker's connection before investigating further, so the damage stops growing."),
             P(TaskId.SRV_Bag, "Preserve evidence", "Keep devices and logs untouched in evidence bags: they prove what happened and who did it."),
             P(TaskId.SRV_Isolate, "Segment the network", "Quarantine VLANs and segmentation stop an infection from spreading to other systems."),
+            P(TaskId.SRV_RouteBackup, "Separate the recovery path", "Keep recovery traffic on a clean, separate path. Contain the incident before reconnecting a backup."),
             P(TaskId.SRV_Restore, "3-2-1 backups", "3 copies, 2 media, 1 offline. Restore from a backup taken before the breach, and verify it."),
             P(TaskId.SRV_Report, "Learn from incidents", "A blameless incident report turns one bad night into better security for everyone."),
         };

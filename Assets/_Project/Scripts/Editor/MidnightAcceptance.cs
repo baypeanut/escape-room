@@ -22,7 +22,7 @@ namespace CSER.EditorTools
         const string Prefix = "Midnight.Acceptance.";
         static readonly string[] StringKeys =
         {
-            "cser.points", "cser.result.1", "cser.result.2", "cser.result.3",
+            "cser.points", "cser.achievements", "cser.result.1", "cser.result.2", "cser.result.3",
             "cser.result.1.latest", "cser.result.2.latest", "cser.result.3.latest"
         };
         static readonly string[] IntKeys = { "cser.unlocked", "cser.reduceFlash" };
@@ -189,6 +189,14 @@ namespace CSER.EditorTools
                 "partial session records remain separate from historical chapter results");
             RunState.Reset();
             StoryProgress.ResetAll();
+            Achievements.Unlock("first_alert");
+            Achievements.Unlock("first_alert");
+            Check(Achievements.Has("first_alert") && Achievements.Count == 1, "achievement unlocks once and stays recorded");
+            Achievements.EvaluateChapter(1, 30f, 0, 0);
+            Check(Achievements.Has("night_shift") && Achievements.Has("clean_hands") && Achievements.Has("quiet_hints"),
+                "chapter evaluation unlocks clear-run achievements");
+            StoryProgress.ResetAll();
+            Check(!Achievements.Has("first_alert") && Achievements.Count == 0, "story reset clears achievement progress");
         }
 
         static void UiLifetimeChecks()
@@ -226,6 +234,13 @@ namespace CSER.EditorTools
                     Check(!manager.AllContainedExcept() && manager.AllContainedExcept(task.id),
                         "required predicate blocks missing " + task.id + " and permits only its explicit exclusion");
                     done.Add(task.id);
+                }
+                done.Clear();
+                foreach (var task in manager.Chapter.tasks)
+                {
+                    if (manager.PrerequisitesMet(task.id)) continue;
+                    Check(!manager.Complete(task.id) && !manager.IsDone(task.id),
+                        "core completion rejects " + task.id + " before its prerequisites");
                 }
             }
             finally

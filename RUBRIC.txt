@@ -11,8 +11,8 @@ Required tasks include interpreting logs, containing the infected laptop, sortin
 Evidence: state checks, actor UI tests, simulated placement/release and invalid-action tests. Controller manipulation still needs physical playtesting.
 
 Game
-The office countdown creates a loss condition. All mandatory chapter tasks are needed for a win. Retry resets the run. Hints, mistake counts, collected notes, chapter unlocks, historical best times and current-session results provide additional game systems. Old records are kept separate from the current attempt.
-Evidence: timeout, replay, score persistence and prerequisite tests.
+The office countdown creates a loss condition. All mandatory chapter tasks are needed for a win. Retry resets the run. Hints, mistake counts, collected notes, chapter unlocks, historical best times, current-session results and unlockable achievements provide additional game systems. Old records are kept separate from the current attempt. Core task completion also rejects missing prerequisites.
+Evidence: timeout, replay, score persistence, achievement and prerequisite tests.
 
 Movement
 Teleport and turning work through the Quest rig. The optional server maintenance rail adds hand-driven travel: hold grip at the rail and pull along its axis. It stops on release and limits movement to the aisle. Teleport remains available. Physical head movement is not corrected by pushing the camera rig.

@@ -79,6 +79,7 @@ namespace CSER
                 PlayerPrefs.DeleteKey(KeyResult + i);
                 PlayerPrefs.DeleteKey(KeyResult + i + ".latest");
             }
+            Achievements.ResetAll();
             PlayerPrefs.Save();
         }
     }

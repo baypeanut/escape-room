@@ -208,6 +208,7 @@ namespace CSER
             note = recovered > 0
                 ? $"Returned {recovered} misplaced item{(recovered == 1 ? "" : "s")} to the original location."
                 : "No loose items need recovery. Held, stored and secured items stay in place.";
+            if (recovered > 0) Achievements.Unlock("evidence_keeper");
             GameUI.I?.Caption(note, Palette.Ink, 5f);
             Sfx.Play(Sfx.I ? Sfx.I.confirm : null, 0.6f);
             return recovered;

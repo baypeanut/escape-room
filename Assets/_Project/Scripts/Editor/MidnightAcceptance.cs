@@ -243,7 +243,8 @@ namespace CSER.EditorTools
             Check(TextOf(menu.transform).Contains("Maintenance rail") && TextOf(menu.transform).Contains("BAG"),
                 "how-to page documents rail movement and BAG recovery");
             ClickNamed(menu.transform, "Menu_Settings");
-            Check(FindButton(menu.transform, "Reduce flashing"), "main menu settings expose reduced flashing");
+            Check(TextOf(menu.transform).Contains("Reduce flashing") && FindButton(menu.transform, "On") && FindButton(menu.transform, "Off"),
+                "main menu settings expose reduced flashing");
         }
 
         static void RequiredTaskChecks(GameManager manager)

@@ -153,7 +153,9 @@ namespace CSER
                 case TaskId.SOC_FindHost: return new[] { TaskId.SOC_OpenAlert };
                 case TaskId.SOC_Classify: return new[] { TaskId.SOC_FindHost };
                 case TaskId.SOC_Escalate: return new[] { TaskId.SOC_Classify };
-                case TaskId.SOC_Exit: return new[] { TaskId.SOC_Escalate, TaskId.SOC_Malware };
+                case TaskId.SOC_Exit: return new[] {
+                    TaskId.SOC_Badge, TaskId.SOC_OpenAlert, TaskId.SOC_FindHost,
+                    TaskId.SOC_Classify, TaskId.SOC_Escalate, TaskId.SOC_Malware };
                 case TaskId.NewPassword: return new[] { TaskId.FredLogin };
                 case TaskId.Enable2FA: return new[] { TaskId.NewPassword };
                 case TaskId.EncryptData: return new[] {

@@ -31,6 +31,15 @@ namespace CSER.EditorTools
             EditorApplication.playModeStateChanged += OnPlayMode;
             EditorApplication.update += Tick;
             Application.logMessageReceived += OnLog;
+            EditorApplication.update += WatchRequest;
+        }
+
+        static void WatchRequest()
+        {
+            const string path = "Temp/cser_request_validation";
+            if (!File.Exists(path) || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            File.Delete(path);
+            RunBatch();
         }
 
         [MenuItem("CSER/Validate Quest Story")]

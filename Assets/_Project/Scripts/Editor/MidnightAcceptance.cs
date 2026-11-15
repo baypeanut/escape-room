@@ -49,6 +49,15 @@ namespace CSER.EditorTools
             EditorApplication.playModeStateChanged += OnPlayMode;
             EditorApplication.update += Tick;
             Application.logMessageReceived += OnLog;
+            EditorApplication.update += WatchRequest;
+        }
+
+        static void WatchRequest()
+        {
+            const string path = "Temp/cser_request_acceptance";
+            if (!File.Exists(path) || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            File.Delete(path);
+            RunBatch();
         }
 
         [MenuItem("CSER/Validate Midnight Acceptance")]
@@ -143,6 +152,7 @@ namespace CSER.EditorTools
                 "every task enum belongs to exactly one chapter");
             PersistenceChecks();
             UiLifetimeChecks();
+            MainMenuChecks();
             yield return ChapterOne();
             yield return OfficeFailures();
             yield return ServerRoom();
@@ -192,6 +202,8 @@ namespace CSER.EditorTools
             Achievements.Unlock("first_alert");
             Achievements.Unlock("first_alert");
             Check(Achievements.Has("first_alert") && Achievements.Count == 1, "achievement unlocks once and stays recorded");
+            Achievements.EvaluateTask(TaskId.SRV_RouteBackup);
+            Check(Achievements.Has("circuit_route"), "task evaluation unlocks the recovery-route achievement");
             Achievements.EvaluateChapter(1, 30f, 0, 0);
             Check(Achievements.Has("night_shift") && Achievements.Has("clean_hands") && Achievements.Has("quiet_hints"),
                 "chapter evaluation unlocks clear-run achievements");
@@ -217,6 +229,21 @@ namespace CSER.EditorTools
             current.onClick.Invoke();
             Check(calls == 1, "replacement active UI control remains usable");
             Object.Destroy(parent);
+        }
+
+        static void MainMenuChecks()
+        {
+            var menu = Object.FindAnyObjectByType<MainMenu>();
+            Check(menu, "main menu actor is present");
+            ClickNamed(menu.transform, "Menu_Achievements");
+            string page = TextOf(menu.transform);
+            Check(page.Contains("Achievements") && page.Contains("Locked") && page.Contains("0 / " + Achievements.Catalog.Length),
+                "achievements page lists locked entries before any unlocks");
+            ClickNamed(menu.transform, "Menu_How to play");
+            Check(TextOf(menu.transform).Contains("Maintenance rail") && TextOf(menu.transform).Contains("BAG"),
+                "how-to page documents rail movement and BAG recovery");
+            ClickNamed(menu.transform, "Menu_Settings");
+            Check(FindButton(menu.transform, "Reduce flashing"), "main menu settings expose reduced flashing");
         }
 
         static void RequiredTaskChecks(GameManager manager)
@@ -357,6 +384,16 @@ namespace CSER.EditorTools
                 Check(ExactButton(hub.canvas, tab), "live menu exposes the " + tab + " tab");
             ExactButton(hub.canvas, "Inventory").onClick.Invoke();
             Check(hub.Tab == 1 && FindButton(hub.canvas, "Recover misplaced items"), "inventory tab exposes required-item recovery");
+            var loose = Items().FirstOrDefault(item => item.CanRecover
+                && (item.kind == ItemKind.EvidencePrintout || item.kind == ItemKind.EvidenceNote || item.kind == ItemKind.USB));
+            Check(loose && Inventory.I, "office provides a recoverable evidence item for inventory recovery");
+            Vector3 home = loose.HomePosition;
+            loose.Teleport(home + new Vector3(2.4f, 0.15f, 0f), loose.transform.rotation);
+            Physics.SyncTransforms();
+            int recovered = Inventory.I.RecoverLooseItems();
+            Check(recovered >= 1 && Achievements.Has("evidence_keeper"),
+                "recover misplaced items returns loose evidence and unlocks Evidence Keeper");
+            Check((loose.transform.position - home).sqrMagnitude < 0.01f, "recovered evidence returns to its original location");
             ExactButton(hub.canvas, "Notes").onClick.Invoke();
             Check(hub.Tab == 2 && TextOf(hub.canvas).Contains("Notes collected during this chapter"),
                 "notes are reachable through the live menu");

@@ -482,7 +482,7 @@ namespace CSER.EditorTools
             hutDoor.duration = 1.6f;
             RealtimePoint("StairLight", props, new Vector3((hx0 + hx1) / 2, 2.2f, (hz0 + hz1) / 2), new Color(1f, 0.85f, 0.6f), 2.5f, 4.5f);
             Label(env, "STAIRWELL  -  ENTER", new Vector3((dx0 + dx1) / 2, dh + 0.3f, hz0 - 0.07f), Quaternion.identity, new Vector2(0.9f, 0.14f), new Color(0.36f, 0.94f, 0.69f), true);
-            AddKnock(hutDoor, DoorKnock.Mode.Menu, new Vector3((dx0 + dx1) / 2, 1.0f, hz0), "PRESS  P  TO KNOCK", new Vector3((dx0 + dx1) / 2, dh + 0.5f, hz0 - 0.07f), 0, 5.2f);
+            AddKnock(hutDoor, DoorKnock.Mode.Menu, new Vector3((dx0 + dx1) / 2, 1.0f, hz0), "POINT + TRIGGER  TO KNOCK", new Vector3((dx0 + dx1) / 2, dh + 0.5f, hz0 - 0.07f), 0, 5.2f);
 
             var rig = Rig(Vector3.zero, 0);
             var head = FindDeep(rig.transform, "CenterEyeAnchor");
@@ -638,7 +638,7 @@ namespace CSER.EditorTools
             reader.led = led.GetComponent<Renderer>();
             reader.ledIdle = ledIdle; reader.ledGranted = ledOk; reader.ledDenied = ledNo;
             Label(env, "FLOOR 3  >", new Vector3(ext.x - 0.02f, 2.3f, -1.65f), Quaternion.Euler(0, 90, 0), new Vector2(0.6f, 0.15f), new Color(0.36f, 0.94f, 0.69f), true);
-            var knock = AddKnock(door, DoorKnock.Mode.Badge, new Vector3(ext.x, 1.0f, -1.65f), "PRESS  P  AT THE DOOR TO TAP YOUR BADGE", new Vector3(ext.x - 0.02f, 2.6f, -1.65f), 90);
+            var knock = AddKnock(door, DoorKnock.Mode.Badge, new Vector3(ext.x, 1.0f, -1.65f), "POINT + TRIGGER  AT THE DOOR TO TAP YOUR BADGE", new Vector3(ext.x - 0.02f, 2.6f, -1.65f), 90);
             knock.reader = reader;
 
             CommonUI(game, head, new Vector3(0, 1.5f, 0.55f), 0);
@@ -824,7 +824,7 @@ namespace CSER.EditorTools
             fl.lens = lensGo.GetComponent<Renderer>();
             fl.findMeGlow = findMe;
 
-            AddKnock(door, DoorKnock.Mode.Exit, new Vector3(ext.x, 1.0f, -1.75f), "PRESS  P  AT THE DOOR WHEN THE INCIDENT IS CLOSED", new Vector3(ext.x - 0.02f, 2.62f, -1.75f), 90);
+            AddKnock(door, DoorKnock.Mode.Exit, new Vector3(ext.x, 1.0f, -1.75f), "POINT + TRIGGER  AT THE DOOR WHEN THE INCIDENT IS CLOSED", new Vector3(ext.x - 0.02f, 2.62f, -1.75f), 90);
 
             CommonUI(game, head, new Vector3(1.45f, 1.55f, 0), -90);
             Hotspots(new Vector3(2.55f, 0, 0), new Vector3(1.0f, 0, 0), new Vector3(-0.7f, 0, 0), new Vector3(-2.7f, 0, 0), new Vector3(2.2f, 0, 0.9f), new Vector3(1.4f, 0, -0.5f));

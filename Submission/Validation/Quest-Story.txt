@@ -1,0 +1,90 @@
+Midnight editor validation
+Unity 6000.5.9f1
+These checks exercise game logic and scene wiring; headset interaction and performance require a Quest 3 playtest.
+PASS four enabled story scenes
+PASS MainMenu has no missing scripts
+PASS MainMenu has one XR camera rig
+SCENE MainMenu objects=1726 particles=0 audioSources=4
+PASS Ch1_NightShift has no missing scripts
+PASS Ch1_NightShift has one XR camera rig
+SCENE Ch1_NightShift objects=2020 particles=0 audioSources=4
+PASS Ch2_FredsOffice has no missing scripts
+PASS Ch2_FredsOffice has one XR camera rig
+SCENE Ch2_FredsOffice objects=2125 particles=1 audioSources=4
+PASS Ch2_FredsOffice includes a particle system
+PASS Ch2_FredsOffice references an authored Midnight shader
+PASS Ch3_ServerRoom has no missing scripts
+PASS Ch3_ServerRoom has one XR camera rig
+SCENE Ch3_ServerRoom objects=3187 particles=1 audioSources=4
+PASS Ch3_ServerRoom includes a particle system
+PASS Ch3_ServerRoom references an authored Midnight shader
+PASS main menu starts
+PASS chapter 1 starts with the correct controller
+PASS chapter 1 rejects progress before readiness
+PASS chapter 1 requires its final objective
+PASS chapter 1 state machine completes only with all objectives
+STATE TEST chapter 1 used direct task callbacks; it is not a full physical playthrough.
+PASS chapter 3 starts with the correct controller
+PASS chapter 3 rejects progress before readiness
+PASS server display waits for readiness
+PASS unresolved server isolation emits particles
+PASS server isolation resolves its shader and stops particles
+PASS chapter 3 requires its final objective
+PASS chapter 3 state machine completes only with all objectives
+STATE TEST chapter 3 used direct task callbacks; it is not a full physical playthrough.
+PASS office puzzle controllers are present
+PASS office waits for readiness
+PASS containment display is idle before readiness
+PASS normal office timer is ten minutes
+PASS UI control available: Terminate session & lock workstation
+PASS intro UI cannot advance or consume the desktop state
+PASS Printout has a physical collider
+PASS intro drop cannot consume evidence
+PASS direct intro completion is rejected
+PASS pending containment emits particles during play
+PASS wrong-chapter completion is rejected
+PASS correct door code is refused before containment
+PASS UI control available: Terminate session & lock workstation
+PASS workstation locks through its UI action
+PASS incorrect login is rejected
+PASS evidence-based login succeeds
+PASS weak replacement password is rejected
+PASS valid replacement password succeeds
+PASS current physical token code enables authentication
+PASS six incorrect email decisions do not solve the puzzle
+PASS wrong email classifications retain retry controls
+PASS correcting all six emails solves triage
+PASS encryption remains locked while physical tasks are missing
+PASS Doc_Salaries has a physical collider
+PASS Printout has a physical collider
+PASS Doc_Clients has a physical collider
+PASS StickyNote has a physical collider
+PASS USB_Stick has a physical collider
+PASS USB containment resolves the display and stops emission
+PASS physical evidence and containment callbacks complete their tasks
+PASS incoming helpdesk message
+PASS UI control available: Send the code from the token
+PASS unsafe helpdesk response cannot solve the puzzle
+PASS UI control available: Refuse & report to Security
+PASS safe helpdesk response solves the puzzle
+PASS office cannot win before final containment
+PASS all prerequisites are complete before encryption
+PASS UI control available: Encrypt & revoke access
+PASS encryption finishes
+PASS contained exfiltration stops the chapter deadline
+PASS wrong final door code is rejected
+PASS all mandatory office tasks produce a win
+PASS terminal state rejects duplicate completion
+PASS restart loads a fresh chapter
+PASS restart resets progress and resumes play
+PASS restart restores the desktop puzzle
+PASS restart clears email decisions
+PASS restart restores physical puzzle items
+PASS deadline causes loss
+PASS loss stops unresolved containment emission
+PASS UI control available: Terminate session & lock workstation
+PASS loss blocks further puzzle progress
+PASS retry from loss reloads the scene
+PASS retry can return to readiness
+PASS no game-script errors or exceptions during the suite
+PASS all checks. Physical grab tracking, controller reach, comfort, visual fidelity and device frame rate remain headset checks.

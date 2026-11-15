@@ -1,0 +1,316 @@
+Midnight Lockdown independent acceptance
+Unity 6000.5.9f1
+UI callbacks and simulated object poses exercise player-facing actors. They do not establish controller tracking, headset comfort, stereo appearance or device performance.
+PASS saved main menu opens
+PASS every task enum belongs to exactly one chapter
+PASS invalid persisted result rejected: empty
+PASS invalid persisted result rejected: x
+PASS invalid persisted result rejected: 1;2
+PASS invalid persisted result rejected: 1;2;3;4
+PASS invalid persisted result rejected: NaN;0;0
+PASS invalid persisted result rejected: Infinity;0;0
+PASS invalid persisted result rejected: -1;0;0
+PASS invalid persisted result rejected: 1;-1;0
+PASS invalid persisted result rejected: 1;0;-1
+PASS invalid persisted result rejected: 1;999999999999;0
+PASS invalid persisted result rejected: 1;bad;0
+PASS historical best retains the actual faster attempt
+PASS latest result retains all fields of the slower attempt
+PASS invalid new records cannot replace valid persisted results
+PASS invalid runtime records cannot count as completed chapters
+PASS partial session records remain separate from historical chapter results
+PASS achievement unlocks once and stays recorded
+PASS task evaluation unlocks the recovery-route achievement
+PASS chapter evaluation unlocks clear-run achievements
+PASS story reset clears achievement progress
+PASS clearing UI deactivates old children synchronously
+PASS stale cleared UI callback cannot perform an action
+PASS disabled UI callback cannot perform an action
+PASS replacement active UI control remains usable
+PASS main menu actor is present
+PASS named UI control available: Menu_Achievements
+PASS achievements page lists locked entries before any unlocks
+PASS named UI control available: Menu_How to play
+PASS how-to page documents rail movement and BAG recovery
+PASS named UI control available: Menu_Settings
+PASS main menu settings expose reduced flashing
+PASS chapter one saved actor references exist
+PASS chapter 1 predicate accepts its complete required set
+PASS required predicate blocks missing SOC_Badge and permits only its explicit exclusion
+PASS required predicate blocks missing SOC_OpenAlert and permits only its explicit exclusion
+PASS required predicate blocks missing SOC_FindHost and permits only its explicit exclusion
+PASS required predicate blocks missing SOC_Classify and permits only its explicit exclusion
+PASS required predicate blocks missing SOC_Escalate and permits only its explicit exclusion
+PASS required predicate blocks missing SOC_Malware and permits only its explicit exclusion
+PASS required predicate blocks missing SOC_Exit and permits only its explicit exclusion
+PASS core completion rejects SOC_FindHost before its prerequisites
+PASS core completion rejects SOC_Classify before its prerequisites
+PASS core completion rejects SOC_Escalate before its prerequisites
+PASS core completion rejects SOC_Exit before its prerequisites
+Predicate coverage above temporarily modified only an internal set. It did not emit completion events or represent a player solution.
+PASS chapter one waits for readiness and denies introductory exit
+PASS intro pickup is remembered without completing the badge objective
+PASS begin recognizes a badge picked up during readiness
+PASS reader refuses exit before the investigation
+PASS foreign chapter task cannot be added during play
+PASS critical alert becomes selectable
+PASS named UI control available: Alert_Critical
+PASS UI control available: ANNA-PC-03
+PASS wrong host does not solve log interpretation
+PASS UI control available: FRED-PC-07
+PASS UI control available: Ransomware
+PASS wrong attack classification does not solve the alert
+PASS UI control available: Data exfiltration
+PASS UI control available: Declare CRITICAL incident
+PASS SIEM actor declares the correctly investigated incident
+PASS named UI control available: Proc0
+PASS UI control available: Terminate selected process
+PASS normal process selection is rejected
+PASS named UI control available: Proc2
+PASS UI control available: Terminate selected process
+PASS named UI control available: Opt1
+PASS unsafe network response does not advance malware containment
+PASS named UI control available: Opt0
+PASS named UI control available: DeleteAll
+PASS destructive file choice does not substitute for quarantine
+PASS quarantine actor control is available
+PASS repeated quarantine callback cannot accelerate the scan
+PASS actor scan finishes malware containment
+PASS chapter one still requires the physical reader action
+PASS chapter one wins through investigation, malware UI and badge-reader actors
+PASS badge reader automatically advances to the office
+PASS office transition provides its saved gameplay actors
+PASS chapter 2 predicate accepts its complete required set
+PASS required predicate blocks missing LockWorkstation and permits only its explicit exclusion
+PASS required predicate blocks missing EvidencePrintout and permits only its explicit exclusion
+PASS required predicate blocks missing EvidenceNote and permits only its explicit exclusion
+PASS required predicate blocks missing ShredDocs and permits only its explicit exclusion
+PASS required predicate blocks missing QuarantineUSB and permits only its explicit exclusion
+PASS required predicate blocks missing FredLogin and permits only its explicit exclusion
+PASS required predicate blocks missing NewPassword and permits only its explicit exclusion
+PASS required predicate blocks missing Enable2FA and permits only its explicit exclusion
+PASS required predicate blocks missing PhishingTriage and permits only its explicit exclusion
+PASS required predicate blocks missing SocialEngineering and permits only its explicit exclusion
+PASS required predicate blocks missing EncryptData and permits only its explicit exclusion
+PASS required predicate blocks missing Escape and permits only its explicit exclusion
+PASS core completion rejects NewPassword before its prerequisites
+PASS core completion rejects Enable2FA before its prerequisites
+PASS core completion rejects EncryptData before its prerequisites
+PASS core completion rejects Escape before its prerequisites
+Predicate coverage above temporarily modified only an internal set. It did not emit completion events or represent a player solution.
+PASS normal office starts with readiness and a ten-minute deadline
+PASS UI control available: Terminate session & lock workstation
+PASS introductory workstation click cannot advance gameplay
+PASS interaction regression starts in a live playing chapter
+PASS drop callback rejects an item never picked up
+PASS inventory hand adapter can acquire an available item
+PASS drop callback sees forced grip immediately before Update
+PASS disabling the hand adapter releases the item with physics restored
+PASS native SDK selection is visible without waiting for GrabItem.Update
+PASS a newly selected native item cannot be consumed by a physics callback
+PASS released native item is accepted once through the real drop callback
+PASS secured item cannot increment its drop task twice
+PASS secured item cannot return to inventory or recovery
+PASS fresh chapter has inventory space for recovery regression
+PASS storing clears synthetic grip and disables the stored item
+PASS retrieval restores exactly one item to the controller hand adapter
+PASS reachable recovery returns an item misplaced within the old ten-metre boundary
+PASS recovery does not move an item in the player's hand
+PASS locked non-flashlight modules cannot be stored or recovered
+PASS recovery cannot duplicate or reset a consumed item
+PASS active XR rig has destination and head-clearance protection
+PASS destination protection is wired to every scene teleport interactor
+PASS teleport accepts a supported destination with body clearance
+PASS teleport rejects placing the body inside a desk
+PASS teleport rejects a destination without ground
+PASS teleport rejects an invalid position
+PASS teleport path cannot pass through a solid wall
+PASS teleport path accepts an unobstructed segment
+PASS physical head penetration does not translate or rotate the tracked rig
+PASS rail grip starts only a tether, without moving the player
+PASS hand pull emits speed-limited movement only along the rail through the locomotion API
+PASS stationary hand produces no passive drift
+PASS releasing grip stops rail movement immediately
+PASS pressing grip away from a rail cannot initiate movement
+PASS holding an air grip while entering the rail does not unexpectedly latch
+PASS loss of controller tracking cancels a rail pull
+PASS a frame hitch cannot cause a large rail jump
+PASS teleport releases the rail tether
+PASS rail motion is clamped to the authored end point
+PASS disabling the rail cancels its active tether
+PASS haptic pulse starts through the production feedback API
+PASS haptic pulse ends while game time is paused
+PASS disabling feedback stops an active haptic pulse
+PASS focus loss stops controller vibration
+PASS live in-game menu is present
+PASS game menu opens the live hub
+PASS live menu exposes the Menu tab
+PASS live menu exposes the Inventory tab
+PASS live menu exposes the Notes tab
+PASS live menu exposes the Settings tab
+PASS inventory tab exposes required-item recovery
+PASS office provides a recoverable evidence item for inventory recovery
+PASS recover misplaced items returns loose evidence and unlocks Evidence Keeper
+PASS recovered evidence returns to its original location
+PASS notes are reachable through the live menu
+PASS live settings expose sound, guidance and timer difficulty
+PASS reduced-flashing control is reachable
+PASS reduced-flashing control changes the production preference
+PASS reduced-flashing preference can be restored through the UI
+PASS live menu close returns to gameplay
+PASS even the correct door code is refused before containment
+PASS keypad keeps its denial message after submission
+PASS input during denial does not erase the feedback
+PASS keypad returns to empty entry after denial
+PASS a wrong door attempt counts once and cannot escape
+PASS the office deadline produces a loss
+PASS UI control available: Terminate session & lock workstation
+PASS loss rejects later workstation and keypad actions
+PASS retry replaces the lost chapter instance
+PASS retry restores readiness, tasks and timer
+PASS server saved scene includes implant and three-module recovery puzzle
+PASS server saved scene includes the restoration light and panel references
+PASS restoration panel materials retain their emission shader keyword after import
+PASS restoration service lights begin switched off
+PASS chapter 3 predicate accepts its complete required set
+PASS required predicate blocks missing SRV_Flashlight and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_Find and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_Unplug and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_Bag and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_Isolate and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_RouteBackup and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_Restore and permits only its explicit exclusion
+PASS required predicate blocks missing SRV_Report and permits only its explicit exclusion
+PASS core completion rejects SRV_Unplug before its prerequisites
+PASS core completion rejects SRV_Bag before its prerequisites
+PASS core completion rejects SRV_Isolate before its prerequisites
+PASS core completion rejects SRV_RouteBackup before its prerequisites
+PASS core completion rejects SRV_Restore before its prerequisites
+PASS core completion rejects SRV_Report before its prerequisites
+Predicate coverage above temporarily modified only an internal set. It did not emit completion events or represent a player solution.
+PASS server operations wait for readiness
+PASS readiness pickup becomes the flashlight objective on begin
+PASS flashlight mounts on a tracked hand with its beam present
+PASS mounted beam follows an upward wrist pose instead of staying level
+PASS mounted beam follows a downward wrist pose
+PASS wrist-pose fixture restores the original tracked-hand transform synchronously
+PASS backup and report remain unavailable before containment
+PASS backup UI rejects missing prerequisite SRV_Find
+PASS backup UI rejects missing prerequisite SRV_Unplug
+PASS backup UI rejects missing prerequisite SRV_Bag
+PASS backup UI rejects missing prerequisite SRV_Isolate
+PASS backup UI rejects missing prerequisite SRV_RouteBackup
+PASS report UI rejects missing prerequisite SRV_Flashlight
+PASS report UI rejects missing prerequisite SRV_Find
+PASS report UI rejects missing prerequisite SRV_Unplug
+PASS report UI rejects missing prerequisite SRV_Bag
+PASS report UI rejects missing prerequisite SRV_Isolate
+PASS report UI rejects missing prerequisite SRV_RouteBackup
+PASS report UI rejects missing prerequisite SRV_Restore
+Missing-prerequisite UI checks seeded task sets without callbacks. The following actor path starts from the restored actual progress.
+PASS named UI control available: Port14
+PASS UI control available: Move to QUARANTINE VLAN 999
+PASS port quarantine is refused before identifying the device
+PASS inspecting the implant completes discovery
+PASS named UI control available: Port1
+PASS UI control available: Move to QUARANTINE VLAN 999
+PASS a legitimate port cannot satisfy containment
+PASS network plug has a grab actor
+PASS moving the held plug away disconnects the implant
+PASS released implant is secured through its evidence-zone actor
+PASS Implant secured native grab targets are disabled in the SDK state machine
+PASS Implant secured pointable grab actors are disabled
+PASS Implant secured colliders cannot remain native hover or distance-grab targets
+PASS untouched cartridge cannot be registered by proximity
+PASS cartridge outside the snap radius is rejected
+PASS backward-facing cartridge is rejected
+PASS diagonal cartridge does not silently rotate into a valid pose
+PASS StraightCartridge observes the simulated grip before release
+PASS StraightCartridge observes the simulated release
+PASS release seats StraightCartridge in bay 0 at quarter turn 0
+PASS occupied bay rejects a second cartridge
+PASS CornerCartridge1 observes the simulated grip before release
+PASS CornerCartridge1 observes the simulated release
+PASS release seats CornerCartridge1 in bay 1 at quarter turn 0
+PASS two cartridges cannot satisfy the recovery route
+PASS CornerCartridge2 observes the simulated grip before release
+PASS CornerCartridge2 observes the simulated release
+PASS release seats CornerCartridge2 in bay 3 at quarter turn 0
+PASS three cartridges with a broken or dangling route do not solve recovery
+PASS CornerCartridge1 observes the simulated grip before release
+PASS CornerCartridge1 observes the simulated release
+PASS release seats CornerCartridge1 in bay 1 at quarter turn 2
+PASS correct physical cartridge rotations form a connected route
+PASS a connected route cannot complete while the network port is still active
+PASS named UI control available: Port14
+PASS UI control available: Move to QUARANTINE VLAN 999
+PASS port isolation permits the valid physical recovery route
+PASS solved cartridges remain latched and cannot be stored or removed
+PASS StraightCartridge secured native grab targets are disabled in the SDK state machine
+PASS StraightCartridge secured pointable grab actors are disabled
+PASS StraightCartridge secured colliders cannot remain native hover or distance-grab targets
+PASS CornerCartridge1 secured native grab targets are disabled in the SDK state machine
+PASS CornerCartridge1 secured pointable grab actors are disabled
+PASS CornerCartridge1 secured colliders cannot remain native hover or distance-grab targets
+PASS CornerCartridge2 secured native grab targets are disabled in the SDK state machine
+PASS CornerCartridge2 secured pointable grab actors are disabled
+PASS CornerCartridge2 secured colliders cannot remain native hover or distance-grab targets
+PASS report remains unavailable before restoration
+PASS named UI control available: Backup1
+PASS UI control available: Restore selected snapshot
+PASS post-breach backup is rejected
+PASS named UI control available: Backup2
+PASS UI control available: Restore selected snapshot
+PASS failed-integrity backup is rejected
+PASS named UI control available: Backup0
+PASS clean recovery operation is available
+PASS duplicate restore callback cannot accelerate the recovery
+PASS clean backup restore completes through its actor
+PASS all physical and recovery objectives precede the incident report
+PASS named UI control available: Report1
+PASS wrong report answer does not advance the question
+PASS correct first report answer is available
+PASS repeating a stale answer cannot skip the later report questions
+PASS named UI control available: Report1
+PASS the second distinct report question must be answered
+PASS named UI control available: Report2
+PASS server actor path wins only after every mandatory physical and report objective
+PASS partial replay stores the actual server attempt without older chapter records
+PASS partial replay review labels its actual session scope
+PASS successful restoration raises the service lights after the transition
+PASS restored ceiling panels have active emission with a nonzero material property value
+PASS reloading the server resets routing, latches and physical cartridges
+PASS named UI control available: Port14
+PASS UI control available: Move to QUARANTINE VLAN 999
+PASS CornerCartridge1 has an enabled native grab actor and target
+PASS CornerCartridge1 avoids physics interpolation competing with native hand poses
+PASS CornerCartridge1 is held through native selection without the forced-grip adapter
+PASS CornerCartridge1 observes native selection
+PASS native held cartridge cannot be seated before release
+PASS CornerCartridge1 native move updates its final world pose
+PASS CornerCartridge1 native unselect clears the held state immediately
+PASS CornerCartridge1 observes native release
+PASS native release seats CornerCartridge1 in bay 0 at quarter turn 2; actual bay=0 quarter=2
+PASS CornerCartridge2 has an enabled native grab actor and target
+PASS CornerCartridge2 avoids physics interpolation competing with native hand poses
+PASS CornerCartridge2 is held through native selection without the forced-grip adapter
+PASS CornerCartridge2 observes native selection
+PASS native held cartridge cannot be seated before release
+PASS CornerCartridge2 native move updates its final world pose
+PASS CornerCartridge2 native unselect clears the held state immediately
+PASS CornerCartridge2 observes native release
+PASS native release seats CornerCartridge2 in bay 2 at quarter turn 0; actual bay=2 quarter=0
+PASS StraightCartridge has an enabled native grab actor and target
+PASS StraightCartridge avoids physics interpolation competing with native hand poses
+PASS StraightCartridge is held through native selection without the forced-grip adapter
+PASS StraightCartridge observes native selection
+PASS native held cartridge cannot be seated before release
+PASS StraightCartridge native move updates its final world pose
+PASS StraightCartridge native unselect clears the held state immediately
+PASS StraightCartridge observes native release
+PASS native release seats StraightCartridge in bay 3 at quarter turn 2; actual bay=3 quarter=2
+PASS native SDK releases solve the alternate bottom route with a half-turned straight cartridge
+PASS an alternate route still cannot bypass disconnection and evidence containment
+PASS no game-script errors or exceptions during acceptance
+Completed 307 assertions. Chapter one and three wins used actor UI, grab-state, placement and trigger paths; no task-completion shortcut supplied either win.
+Human headset play, both-eye rendering, controller reach, haptic feel, frame time, video and peer assessment remain outside this automated evidence.

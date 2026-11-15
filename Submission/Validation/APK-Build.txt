@@ -1,0 +1,1 @@
+result=Succeeded errors=0 warnings=5 size=1295034990 time=00:02:59.2289250 path=/Users/ahmet/Desktop/MidnightLockdown/Builds/MidnightLockdown-Quest3.apk

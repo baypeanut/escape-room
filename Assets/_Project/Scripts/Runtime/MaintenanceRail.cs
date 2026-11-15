@@ -8,7 +8,7 @@ namespace CSER
     {
         [Min(0.3f)] public float railLength = 3.15f;
         [Range(0.08f, 0.3f)] public float gripRadius = 0.18f;
-        [Range(0.1f, 1f)] public float maxSpeed = 0.65f;
+        [Range(0.1f, 1.5f)] public float maxSpeed = 1.05f;
         [Range(0.5f, 1.5f)] public float pullScale = 1f;
         public bool allowPull = true;
 
@@ -37,6 +37,7 @@ namespace CSER
         Quaternion previousTrackingRotation;
         bool initialized;
         UniqueIdentifier identifier;
+        float nextRailCue;
 
         public bool IsPulling => hand != OVRInput.Controller.None;
         public Vector3 LastRequestedMovement { get; private set; }
@@ -138,6 +139,13 @@ namespace CSER
             }
             LastRequestedMovement = movement;
             locomotor.HandleLocomotionEvent(new LocomotionEvent(identifier.ID, movement, LocomotionEvent.TranslationType.Relative));
+            float strength = Mathf.Clamp(0.12f + movement.magnitude * 8f, 0.12f, 0.35f);
+            Sfx.Haptic(strength, 0.03f, hand);
+            if (Sfx.I && Sfx.I.drop && movement.sqrMagnitude > 0.00005f && Time.unscaledTime >= nextRailCue)
+            {
+                nextRailCue = Time.unscaledTime + 0.18f;
+                Sfx.PlayAt(Sfx.I.drop, sample.worldPosition, 0.12f);
+            }
         }
 
         bool AnyItemHeld()

@@ -187,8 +187,10 @@ namespace CSER
             if (Solved) statusLabel.text = "Route verified. The backup console is ready.";
             else if (gm && gm.State == GameState.Lost) statusLabel.text = "Session ended. Retry to restore the connection.";
             else if (!gm || !gm.IsDone(TaskId.SRV_Isolate)) statusLabel.text = "Isolate the affected port before reconnecting the backup.";
-            else if (SeatedCount == 3) statusLabel.text = "The line is open. Turn or move a cartridge.";
-            else statusLabel.text = "Join BACKUP to RECOVERY using all three cartridges.";
+            else if (SeatedCount == 0) statusLabel.text = "Join BACKUP to RECOVERY using all three cartridges.";
+            else if (SeatedCount < 3) statusLabel.text = $"Seated {SeatedCount}/3. Seat every cartridge, then check the path.";
+            else if (HasValidRoute()) statusLabel.text = "Path looks complete. Hold still while the panel verifies.";
+            else statusLabel.text = "All three are seated, but the path still breaks. Turn or swap a cartridge.";
         }
 
         void Update()

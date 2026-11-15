@@ -24,6 +24,7 @@ namespace CSER
             shredder.Accepted += item =>
             {
                 item.Consume(shredder.intake, 0.35f, 0.3f);
+                Sfx.Haptic(0.55f, 0.18f);
                 StartCoroutine(Shred());
                 if (++shredded >= confidentialCount) GameManager.I.Complete(TaskId.ShredDocs);
                 else GameUI.I?.Caption($"Shredded. {confidentialCount - shredded} confidential document left.", Palette.Ink);

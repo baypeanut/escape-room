@@ -47,14 +47,12 @@ namespace CSER
         {
             var gm = GameManager.I;
             if (gm == null) return;
-            bool toggle = OVRInput.GetDown(OVRInput.Button.PrimaryThumbstick, OVRInput.Controller.LTouch);
             bool close = false;
             int step = 0;
 #if ENABLE_INPUT_SYSTEM
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb != null)
             {
-                if (kb.lKey.wasPressedThisFrame) toggle = true;
                 if (kb.escapeKey.wasPressedThisFrame) close = true;
                 if (IsOpen && kb.rightArrowKey.wasPressedThisFrame) step = 1;
                 if (IsOpen && kb.leftArrowKey.wasPressedThisFrame) step = -1;
@@ -66,7 +64,6 @@ namespace CSER
                 if (AutoHints) SetAutoHints(false);
                 return;
             }
-            if (toggle) Toggle(Tab);
             if (close && IsOpen) Close();
             if (step != 0) SetTab((Tab + step + 4) % 4);
 

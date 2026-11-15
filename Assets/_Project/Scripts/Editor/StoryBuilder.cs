@@ -285,7 +285,7 @@ namespace CSER.EditorTools
             var leaf = door.transform.Find("Door");
             if (leaf && leaf.GetComponent<Collider>())
                 UnityEventTools.AddPersistentListener(MakeClickable(leaf.gameObject, null).onClick, k.Knock);
-            prompt = prompt.Replace("PRESS  P", "POINT + TRIGGER (OR P)");
+            prompt = prompt.Replace("PRESS  P", "POINT + TRIGGER");
             Label(env, prompt, promptPos, Quaternion.Euler(0, yaw, 0), new Vector2(0.9f, 0.12f), new Color(0.36f, 0.94f, 0.69f), true);
             return k;
         }

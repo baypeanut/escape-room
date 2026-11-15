@@ -105,7 +105,7 @@ namespace CSER
                         "Step 1: stop the malicious process. Step 2: cut the network. Step 3: quarantine the file.",
                         "Kill 'svch0st32.exe' (unsigned, 97% CPU), choose 'Disconnect from network', then quarantine the file."),
                     T(TaskId.SOC_Exit, "Tap your badge on the reader to open the door",
-                        "The door to the office floor needs your badge. Keep it in your hand (or press I to store it).",
+                        "The door to the office floor needs your badge. Keep it in your hand, or store it in BAG.",
                         "Walk to the door and touch the badge to the reader, or point at the door and pull the trigger.",
                         "Hold the badge against the reader by the door until the light turns green: the next chapter starts."),
                 },

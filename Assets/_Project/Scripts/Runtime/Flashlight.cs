@@ -91,7 +91,7 @@ namespace CSER
             if (left) o2.x = -o2.x;
             transform.localPosition = o2;
             transform.localRotation = Quaternion.identity;
-            GameUI.I?.Caption("Flashlight on your wrist. Point your hand to aim; click the right stick to switch it. Press X for inventory.", Palette.Ink, 6f);
+            GameUI.I?.Caption("Flashlight on your wrist. Point your hand to aim; click the right stick to switch it. Use BAG on your wrist for inventory.", Palette.Ink, 6f);
         }
 
         void Unmount()

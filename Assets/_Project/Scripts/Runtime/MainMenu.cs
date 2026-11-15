@@ -28,12 +28,12 @@ namespace CSER
             nav.anchorMin = new Vector2(0, 0); nav.anchorMax = new Vector2(0, 1);
             nav.pivot = new Vector2(0, 0.5f);
             nav.offsetMin = new Vector2(60, 60); nav.offsetMax = new Vector2(420, -220);
-            string[] items = { StoryProgress.UnlockedChapter > 1 ? "Continue" : "New story", "Chapters", "How to play", "Settings", "Credits", "Quit" };
+            string[] items = { StoryProgress.UnlockedChapter > 1 ? "Continue" : "New story", "Chapters", "Achievements", "How to play", "Settings", "Credits", "Quit" };
             for (int i = 0; i < items.Length; i++)
             {
                 int idx = i;
                 var b = UIKit.Button(nav, items[i], i == page ? Palette.Mint : Palette.Hex("1C2A3D"), i == page ? Palette.Ink : Color.white, () => Nav(idx), 30, "Menu_" + items[i]);
-                b.GetComponent<RectTransform>().Top(76, i * 88);
+                b.GetComponent<RectTransform>().Top(68, i * 78);
             }
             var panel = UIKit.Panel(bg.transform, "Page", Palette.Hex("0E1622"));
             panel.rectTransform.Fill(450, 60, 220, 60);
@@ -42,15 +42,16 @@ namespace CSER
             {
                 case 0: Continue(p); break;
                 case 1: Chapters(p); break;
-                case 2: HowTo(p); break;
-                case 3: Settings(p); break;
-                case 4: CreditsPage(p); break;
+                case 2: AchievementsPage(p); break;
+                case 3: HowTo(p); break;
+                case 4: Settings(p); break;
+                case 5: CreditsPage(p); break;
             }
         }
 
         void Nav(int idx)
         {
-            if (idx == 5)
+            if (idx == 6)
             {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
@@ -98,6 +99,28 @@ namespace CSER
             }
         }
 
+        void AchievementsPage(RectTransform p)
+        {
+            var heading = UIKit.Text(p, $"<b>Achievements</b>  <color=#5BF0B0>{Achievements.Count} / {Achievements.Catalog.Length}</color>\n<size=70%><color=#9FB3CC>Unlocked through chapter clears, clean runs and key incident actions.</color></size>", 34, Color.white, TextAlignmentOptions.TopLeft);
+            heading.rectTransform.Top(90, 20, 24, 24);
+            for (int i = 0; i < Achievements.Catalog.Length; i++)
+            {
+                var entry = Achievements.Catalog[i];
+                bool unlocked = Achievements.Has(entry.id);
+                var card = UIKit.Panel(p, "Achievement" + i, unlocked ? Palette.Hex("1C2A3D") : Palette.Hex("141B26"));
+                card.rectTransform.At(new Vector2(0, 1), new Vector2(24 + (i % 2) * 470, -110 - (i / 2) * 118), new Vector2(450, 106), new Vector2(0, 1));
+                var text = UIKit.Text(card.transform,
+                    unlocked
+                        ? $"<color=#5BF0B0><b>{entry.title}</b></color>\n<size=80%>{entry.detail}</size>"
+                        : $"<color=#8A93A3><b>{entry.title}</b></color>\n<size=80%>Locked</size>",
+                    24, Color.white, TextAlignmentOptions.TopLeft);
+                text.rectTransform.Fill(18, 18, 14, 14);
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 16;
+                text.fontSizeMax = 24;
+            }
+        }
+
         void HowTo(RectTransform p)
         {
             var t = UIKit.Text(p,
@@ -105,10 +128,9 @@ namespace CSER
                 "- Point the ray and pull the <b>trigger</b> to press buttons and screens.\n" +
                 "- Squeeze <b>grip</b> to grab. Point at an object and squeeze grip to pull it to you.\n" +
                 "- Left thumbstick: <b>teleport</b> (push forward, aim, release). Right stick: turn.\n" +
-                "- <b>Y / B</b> or the wrist panel opens the menu: objectives, hints, learning points.\n\n" +
-                "<b>Hand tracking</b>\n" +
-                "- Pinch to click with the hand ray; poke screens with your finger; make a fist to grab.\n" +
-                "- Look at your left wrist: tap MENU or HINT.\n\n" +
+                "- <b>Y / B</b> or the wrist panel opens the menu: objectives, hints, learning points.\n" +
+                "- <b>X</b> opens inventory. Look at your left wrist for MENU, HINT and BAG.\n" +
+                "- Click the right stick to switch a mounted flashlight.\n\n" +
                 "<b>Maintenance rail</b>\n" +
                 "- In the server aisle, hold grip near the rail and pull your hand back to move along it. Release to stop. Teleport is always available.\n\n" +
                 "<b>Stuck?</b>  Read the radio captions and follow the green marker. Hints get stronger each time you ask.",
@@ -121,14 +143,21 @@ namespace CSER
             Toggle(p, 0, "Guide marker", Guide.Enabled, v => Guide.Enabled = v);
             Toggle(p, 1, "Ambient sound", Sfx.AmbienceOn, v => Sfx.I?.SetAmbience(v));
             Toggle(p, 2, "Radio voice", Narrator.VoiceEnabled, v => Narrator.VoiceEnabled = v);
+            bool reduceFlash = PlayerPrefs.GetInt("cser.reduceFlash", 0) == 1;
+            Toggle(p, 3, "Reduce flashing", reduceFlash, v =>
+            {
+                PlayerPrefs.SetInt("cser.reduceFlash", v ? 1 : 0);
+                PlayerPrefs.Save();
+                if (AlertStateManager.I) AlertStateManager.I.ReduceFlashing = v;
+            });
             var q = UIKit.Text(p, "<b>Quality</b>", 28, Color.white);
-            q.rectTransform.At(new Vector2(0, 1), new Vector2(40, -320), new Vector2(300, 60), new Vector2(0, 1));
+            q.rectTransform.At(new Vector2(0, 1), new Vector2(40, -400), new Vector2(300, 60), new Vector2(0, 1));
             string[] levels = { "Low", "Medium", "High" };
             for (int i = 0; i < 3; i++)
             {
                 int idx = i;
                 var b = UIKit.Button(p, levels[i], Quality.Level == i ? Palette.Blue : Palette.Hex("1C2A3D"), Color.white, () => { Quality.Set(idx); Build(); }, 26);
-                b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(340 + i * 180, -320), new Vector2(170, 60), new Vector2(0, 1));
+                b.GetComponent<RectTransform>().At(new Vector2(0, 1), new Vector2(340 + i * 180, -400), new Vector2(170, 60), new Vector2(0, 1));
             }
             var reset = UIKit.Button(p, "Reset story progress", Palette.Red, Color.white, () => { StoryProgress.ResetAll(); page = 0; Build(); }, 26);
             reset.GetComponent<RectTransform>().At(new Vector2(0, 0), new Vector2(40, 40), new Vector2(380, 70), Vector2.zero);

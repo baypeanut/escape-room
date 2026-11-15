@@ -12,7 +12,7 @@ Point and pull trigger to use screens. Grip to pick up objects; release to drop 
 The server aisle also has a maintenance rail. With an empty hand, hold grip near the rail and pull your hand backward to move along it. Let go to stop. This is optional; you can use teleport throughout the game.
 
 Menu and assistance
-Inventory stores held objects and recovers misplaced loose items. Completed evidence stays deposited. Notes contains the lessons you have collected. Settings controls the guide marker, ambience, radio voice, reduced flashing and office difficulty. Radio voice is off initially; radio captions and puzzle sounds stay on. Changing difficulty during the office chapter starts that chapter again.
+Inventory stores held objects and recovers misplaced loose items. Completed evidence stays deposited. Notes contains the lessons you have collected. Settings controls the guide marker, ambience, radio voice, reduced flashing and office difficulty. The main menu Achievements page tracks unlocks such as clean runs and circuit completion. Radio voice is off initially; radio captions and puzzle sounds stay on. Changing difficulty during the office chapter starts that chapter again.
 
 The office allows 10 minutes in Normal or 8 in Experienced. Containment stops the transfer countdown, but the door still requires the correct code. Asking for hints counts toward the result. The final review shows completed attempts from the current session; chapter cards keep historical best times separately.
 

@@ -48,7 +48,13 @@ Audio
 Engine, packages and font
   Unity 6000.5.9f1, URP, Input System, XRI, OpenXR and TextMesh Pro. Package versions are recorded in Packages/packages-lock.json. Unity includes each package's terms with the package.
   Unity VR Template 10.0.0: source of the compatible URP global settings, adapted to use the game's volume profile. https://docs.unity3d.com/Packages/com.unity.template.vr@10.0/manual/index.html
-  Meta XR SDK 207.0.1: https://developers.meta.com/horizon/licenses/oculussdk/
+  Companion notice for that template: ThirdParty/Unity-VR-Template.txt
+  Meta XR SDK packages from Packages/manifest.json (versions also in Packages/packages-lock.json):
+    com.meta.xr.sdk.core 207.0.1
+    com.meta.xr.sdk.interaction.ovr 207.0.1
+    com.meta.xr.sdk.audio 85.0.0
+  Meta license index: https://developers.meta.com/horizon/licenses/oculussdk/
+  Assets/InteractionSDK/ComprehensiveInteractors.prefab is the Interaction SDK interactor setup used by the scenes; it comes with the Meta interaction package above.
   Keep package notices required for any distribution of a player build.
   Liberation Sans: https://github.com/liberationfonts/liberation-fonts
   The font's OFL notice is in Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt.

@@ -1,28 +1,54 @@
 Midnight Lockdown
-Assignment 6 | Meta Quest 3
+Assignment 6 - Meta Quest 3
 
-A transfer alert interrupts your night shift. Trace it to Fred's workstation, stop the transfer, then contain the device hidden in the server room. The terminals and network traffic are part of the game; nothing connects to a real network.
+What this is
+You are on night shift when a transfer alert comes in. Follow it to Fred's workstation, stop the upload, then find the device that does not belong in the server room. The SIEM screens, mail client, and network panels are part of the story. They do not talk to a real network.
 
-Playing on Quest 3
-Install MidnightLockdown-Quest3.apk with Meta Quest Developer Hub or adb, then open Midnight Lockdown from Unknown Sources. It runs on the headset without a PC after installation. Choose New story, Play, then BEGIN on the chapter card.
+There are three playable chapters: the SOC floor, Fred's office, and the basement server room. The office chapter has a timer. The other two end when you finish their required tasks.
+
+Install on Quest 3
+1. Install Builds/MidnightLockdown-Quest3.apk with Meta Quest Developer Hub or adb.
+2. On the headset, open Midnight Lockdown from Unknown Sources.
+3. Choose New story or Continue, open Play, then press BEGIN on the chapter card.
+
+No PC link is required after the APK is installed.
 
 Controls
-Point and pull trigger to use screens. Grip to pick up objects; release to drop them. Point and grip for distant objects. Push the left stick forward, aim and release to teleport. The right stick turns. Y or B opens the menu; the wrist panel has MENU, HINT and BAG buttons. Click the right stick to switch the mounted flashlight.
+- Point the ray and pull the trigger to use screens and buttons.
+- Squeeze grip to pick something up. Release grip to drop it. Point at a distant object and squeeze grip to pull it in.
+- Left stick: push forward, aim, release to teleport. Right stick: turn.
+- Y or B opens the in-game menu. The left wrist panel has MENU, HINT, and BAG.
+- X also opens inventory. BAG can store a held item and recover loose items that fell out of reach. Deposited evidence stays put.
+- Click the right stick to turn the mounted flashlight on or off.
 
-The server aisle also has a maintenance rail. With an empty hand, hold grip near the rail and pull your hand backward to move along it. Let go to stop. This is optional; you can use teleport throughout the game.
+Maintenance rail (server aisle only)
+With an empty hand, hold grip near the rail and pull your hand back to move along it. Release to stop. Teleport still works if you prefer that.
 
-Menu and assistance
-Inventory stores held objects and recovers misplaced loose items. Completed evidence stays deposited. Notes contains the lessons you have collected. Settings controls the guide marker, ambience, radio voice, reduced flashing and office difficulty. The main menu Achievements page tracks unlocks such as clean runs and circuit completion. Radio voice is off initially; radio captions and puzzle sounds stay on. Changing difficulty during the office chapter starts that chapter again.
+Menus and settings
+- Objectives, hints, and learning notes live in the wrist menu.
+- Settings covers the guide marker, room ambience, radio voice, reduce flashing, and office difficulty (Normal 10 min / Experienced 8 min). Changing difficulty mid-office reloads that chapter.
+- Radio voice starts off. Captions and puzzle sounds stay on either way.
+- The main menu has an Achievements page for unlocks such as clean runs and finishing the recovery circuit.
+- Chapter cards keep historical best times. The end-of-run review only lists chapters finished in the current session.
 
-The office allows 10 minutes in Normal or 8 in Experienced. Containment stops the transfer countdown, but the door still requires the correct code. Asking for hints counts toward the result. The final review shows completed attempts from the current session; chapter cards keep historical best times separately.
+Office door and recovery circuit
+Containment stops the office countdown, but the door still needs the four-digit code from the Containment Board. Entering the code early is refused until the required tasks are done.
 
-Recovery circuit
-After isolating the server port, find the recovery panel. Pick up and turn the three cartridges, then release them flat against the sockets. Join BACKUP to RECOVERY with a continuous path using all three pieces. A cartridge can be lifted and turned again until the route is verified. A failed drop returns it to its tray. The backup console stays locked until physical containment and the route are complete.
+In the server room, isolate the infected port first. Then seat all three cartridges on the recovery panel so BACKUP joins RECOVERY in one continuous path. You can lift and turn a cartridge again until the panel accepts the route. A bad drop sends it back to the tray. The backup console stays locked until physical containment and that route are finished.
 
-Opening the source
-Use Unity 6000.5.9f1 with Android Build Support, SDK, NDK and OpenJDK. Open this folder in Unity Hub and allow package restoration. Open Assets/_Project/Scenes/MainMenu.unity. The four saved scenes are already configured in Build Settings. Select Android, then CSER > Build APK (Quest). The default output is Builds/MidnightLockdown-Quest3.apk.
+Open the Unity project
+1. Install Unity 6000.5.9f1 with Android Build Support, SDK, NDK, and OpenJDK.
+2. Open this folder in Unity Hub and let packages restore.
+3. Open Assets/_Project/Scenes/MainMenu.unity.
+4. Confirm all four story scenes are enabled in Build Settings.
+5. Switch the platform to Android, then use CSER > Build APK (Quest).
+   Default output: Builds/MidnightLockdown-Quest3.apk
 
-Verification
-Run CSER > Validate Quest Story, then CSER > Validate Midnight Acceptance. These commands check game rules and scene connections in the editor. They use simulated buttons, object poses and trigger callbacks. They do not test physical Quest controllers, stereo rendering, comfort or headset frame rate. See Verification in the submission archive for the actual run reports. TESTING.txt covers the headset pass and the recording sequence.
+Editor checks
+CSER > Validate Quest Story and CSER > Validate Midnight Acceptance exercise game rules and scene wiring with simulated UI clicks and object poses. They do not replace a headset playtest. Written reports for this build are under Submission/Verification.txt and Submission/Validation/. TESTING.txt has the headset pass list and the shot list for the team video.
 
-SOURCES.txt lists contributors, models, textures, audio and software dependencies. RUBRIC.txt maps the assignment to the implementation. SUBMISSION.txt lists the remaining human submission material.
+Other files
+- SOURCES.txt: outside models, textures, audio, packages, and contributor notes
+- RUBRIC.txt: how the build maps to the assignment criteria (not a grade)
+- SUBMISSION.txt: GitHub link plus what still has to be added by hand (video and filled peer assessments)
+- Submission/Peer-Assessment-blank.pdf: blank form only; do not hand that in as a completed assessment

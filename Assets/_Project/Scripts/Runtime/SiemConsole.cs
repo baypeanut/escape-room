@@ -142,15 +142,19 @@ namespace CSER
                 int idx = i;
                 var b = UIKit.Button(parent, options[i], Palette.Hex("24426B"), Color.white, () =>
                 {
+                    var manager = GameManager.I;
+                    if (!manager || manager.State != GameState.Playing || manager.IsDone(task) || !manager.IsDone(TaskId.SOC_OpenAlert)) return;
+                    if (task == TaskId.SOC_Classify && !manager.IsDone(TaskId.SOC_FindHost)) return;
+                    if (task == TaskId.SOC_FindHost && manager.IsDone(TaskId.SOC_FindHost)) return;
                     if (idx == correct)
                     {
                         feedback = null;
-                        GameManager.I.Complete(task);
+                        manager.Complete(task);
                     }
                     else
                     {
                         feedback = wrongHint;
-                        GameManager.I.Mistake("Not quite. " + wrongHint);
+                        manager.Mistake("Not quite. " + wrongHint);
                         Rebuild();
                     }
                 }, 26, "Answer_" + options[i]);

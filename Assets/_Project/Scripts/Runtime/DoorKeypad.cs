@@ -51,7 +51,7 @@ namespace CSER
             var gm = GameManager.I;
             if (gm.State != GameState.Playing) return;
             string code = string.Concat(gm.DoorCode);
-            if (entry == code && gm.IsDone(TaskId.EncryptData))
+            if (entry == code && gm.AllContainedExcept(TaskId.Escape))
             {
                 open = true;
                 display.text = "OPEN";
@@ -61,7 +61,7 @@ namespace CSER
             }
             else
             {
-                gm.Mistake(entry == code ? "Override refused: the attacker still has access. Finish containment first." : "Wrong passkey. Check the Data Section popup or the Containment Board.");
+                gm.Mistake(entry == code ? "Override refused: finish every containment task before the door will open." : "Wrong passkey. Check the Data Section popup or the Containment Board.");
                 entry = "";
                 StartCoroutine(Flash("DENIED"));
             }

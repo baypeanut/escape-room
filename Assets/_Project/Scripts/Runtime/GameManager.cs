@@ -105,7 +105,7 @@ namespace CSER
 
         public bool Complete(TaskId t)
         {
-            if (State != GameState.Playing || !Array.Exists(Chapter.tasks, task => task.id == t) || !done.Add(t)) return false;
+            if (State != GameState.Playing || !Array.Exists(Chapter.tasks, task => task.id == t) || !PrerequisitesMet(t) || !done.Add(t)) return false;
             Sfx.Play(Sfx.I ? Sfx.I.success : null);
             Sfx.Haptic(0.5f, 0.1f);
             if (GameData.HasPoint(t))
@@ -114,6 +114,7 @@ namespace CSER
                 var lp = GameData.Point(t);
                 GameUI.I?.Toast("Learning point unlocked", $"<b>{lp.title}</b>\n{lp.text}", Palette.Mint, 9f);
             }
+            Achievements.EvaluateTask(t);
             TaskCompleted?.Invoke(t);
             for (int i = 0; i < GameData.Areas.Length; i++)
             {
@@ -136,6 +137,38 @@ namespace CSER
             foreach (var info in Chapter.tasks)
                 if (Array.IndexOf(except, info.id) < 0 && !done.Contains(info.id)) return false;
             return true;
+        }
+
+        public bool PrerequisitesMet(TaskId t)
+        {
+            foreach (var required in RequiredBefore(t))
+                if (!done.Contains(required)) return false;
+            return true;
+        }
+
+        static TaskId[] RequiredBefore(TaskId t)
+        {
+            switch (t)
+            {
+                case TaskId.SOC_FindHost: return new[] { TaskId.SOC_OpenAlert };
+                case TaskId.SOC_Classify: return new[] { TaskId.SOC_FindHost };
+                case TaskId.SOC_Escalate: return new[] { TaskId.SOC_Classify };
+                case TaskId.SOC_Exit: return new[] { TaskId.SOC_Escalate, TaskId.SOC_Malware };
+                case TaskId.NewPassword: return new[] { TaskId.FredLogin };
+                case TaskId.Enable2FA: return new[] { TaskId.NewPassword };
+                case TaskId.EncryptData: return new[] {
+                    TaskId.LockWorkstation, TaskId.EvidencePrintout, TaskId.EvidenceNote, TaskId.ShredDocs,
+                    TaskId.QuarantineUSB, TaskId.FredLogin, TaskId.NewPassword, TaskId.Enable2FA,
+                    TaskId.PhishingTriage, TaskId.SocialEngineering };
+                case TaskId.Escape: return new[] { TaskId.EncryptData };
+                case TaskId.SRV_Unplug: return new[] { TaskId.SRV_Find };
+                case TaskId.SRV_Bag: return new[] { TaskId.SRV_Unplug };
+                case TaskId.SRV_Isolate: return new[] { TaskId.SRV_Find };
+                case TaskId.SRV_RouteBackup: return new[] { TaskId.SRV_Isolate };
+                case TaskId.SRV_Restore: return new[] { TaskId.SRV_Find, TaskId.SRV_Unplug, TaskId.SRV_Bag, TaskId.SRV_Isolate, TaskId.SRV_RouteBackup };
+                case TaskId.SRV_Report: return new[] { TaskId.SRV_Restore };
+                default: return Array.Empty<TaskId>();
+            }
         }
 
         public void Mistake(string message)
@@ -170,6 +203,7 @@ namespace CSER
         {
             RunState.Record(chapter, Elapsed, HintsUsed, Mistakes);
             StoryProgress.Complete(chapter, Elapsed, HintsUsed, Mistakes);
+            Achievements.EvaluateChapter(chapter, Elapsed, HintsUsed, Mistakes);
             SetState(GameState.Won);
             Sfx.Play(Sfx.I ? Sfx.I.win : null);
         }

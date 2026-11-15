@@ -1,15 +1,15 @@
 Midnight Lockdown | Verification record
 14 November 2026
 
-CSER > Validate Quest Story: 80 checks passed.
-CSER > Validate Midnight Acceptance: 279 assertions passed.
-The chapter-one and chapter-three acceptance wins used actor UI, grab-state, placement and trigger paths. Native selection/release was exercised for the alternate circuit. These are editor simulations.
+CSER > Validate Quest Story: 81 checks passed.
+CSER > Validate Midnight Acceptance: 307 assertions passed.
+The chapter-one and chapter-three acceptance wins used actor UI, grab-state, placement and trigger paths. Native selection/release was exercised for the alternate circuit. New coverage includes achievement unlock/reset, main-menu achievements and reduce-flashing settings, BAG recovery of misplaced evidence, and core completion rejecting tasks before prerequisites. These are editor simulations.
 
 Quest build: Unity 6000.5.9f1, version 0.2.0, code 2.
 Package: com.baypeanut.midnightlockdown
 ARM64 only, non-development, APK Signature Scheme v2 verified.
 Build completed with zero errors and five warnings from compiler and editor package processing.
-APK SHA-256: 8287786c80a379877c6cbe839ccec05e7ecdffe51a27af45c67753ea6240305e
+APK SHA-256: 30be7d1a4c7ef60bea47d397bfb1a23df9f0ae4ba4eedcac270d5b179116b29b
 
 Four unused SDK helper assemblies are excluded with dependency checks. Temporary development connections are disabled and their private values were checked against the built package.
 

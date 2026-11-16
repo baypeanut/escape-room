@@ -186,8 +186,7 @@ namespace CSER
     {
         public const string Text =
             "<b>Midnight Lockdown</b>\n" +
-            "Environment, initial story and interface: K068, K075, K081 (used with permission)\n" +
-            "Assignment 6 adaptation: recovery circuit, maintenance rail, game rules, interaction fixes and environmental effects.\n\n" +
+            "A VR escape room for Meta Quest 3.\n\n" +
             "<b>Built with</b>  Unity 6 (URP), Meta XR Core & Interaction SDK\n" +
             "<b>3D models</b>  Poly Haven (CC0)\n" +
             "<b>Materials & textures</b>  ambientCG (CC0), Poly Haven (CC0)\n" +
@@ -195,6 +194,6 @@ namespace CSER
             "<b>UI sounds</b>  Kenney Interface Sounds (CC0)\n" +
             "<b>Voices</b>  Windows speech synthesis (Microsoft Zira / David)\n" +
             "<b>Photos</b>  Wikimedia Commons (public domain)\n\n" +
-            "Design reference: 'Cyber Security Escape Room Online'. Full asset sources are in SOURCES.txt.";
+            "Full asset sources are in SOURCES.txt.";
     }
 }

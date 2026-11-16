@@ -25,9 +25,8 @@ Show the final escape, plus a separate timeout and retry.
 Include a real person wearing the headset, ideally beside the matching headset capture.
 
 Reflection notes to discuss in your own words
-The new circuit requires spatial reasoning instead of another terminal answer.
+The circuit requires spatial reasoning instead of another terminal answer.
 The rail explores hand-driven movement while retaining teleport for access and comfort.
 Containment gates prevent recovery and reporting before the physical incident is controlled.
 Tests caught stale button callbacks, incorrect replay statistics and missing settings access.
-Explain which parts came from the starting project and what your team changed.
 Describe what the actual headset playtest showed, including anything that still needs work.

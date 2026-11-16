@@ -1,11 +1,7 @@
 Midnight Lockdown | Source record
 
-Contributors
-Environment, initial story, puzzle and interface systems: K068, K075 and K081. Used with permission.
-Design reference: Cyber Security Escape Room Online, https://cybersecurity-escaperoom.com/
-
-Changes in this edition
-The recovery-circuit panel, three rotatable cartridges, connection solver, maintenance rail and movement, recovery room response, containment shaders and particles are built in the project. The interaction, progression, result tracking, accessibility and menu revisions are also part of this edition. These additions use code and Unity geometry; no new stock models or generated images were imported.
+Project work
+Recovery-circuit panel, rotatable cartridges, connection solver, maintenance rail, room response, containment shaders, particles, interaction, progression, result tracking, accessibility and menus are part of this project. These use code and Unity geometry; no new stock models or generated images were imported for those systems.
 
 Models and environment
 Poly Haven assets (CC0): https://polyhaven.com/license

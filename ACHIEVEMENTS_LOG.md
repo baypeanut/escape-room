@@ -937,3 +937,4 @@ Work log branch. `main` is unchanged.
 - Entry 933 (2026-11-17T19:33:47Z)
 - Entry 934 (2026-11-17T19:34:03Z)
 - Entry 935 (2026-11-17T19:34:19Z)
+- Entry 936 (2026-11-17T19:34:35Z)

@@ -826,3 +826,4 @@ Work log branch. `main` is unchanged.
 - Entry 823 (2026-11-16T17:46:47Z)
 - Entry 824 (2026-11-16T17:47:03Z)
 - Entry 825 (2026-11-16T17:47:19Z)
+- Entry 825 (2026-11-17T19:01:30Z)

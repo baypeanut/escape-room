@@ -837,3 +837,4 @@ Work log branch. `main` is unchanged.
 - Entry 833 (2026-11-17T19:03:43Z)
 - Entry 834 (2026-11-17T19:03:58Z)
 - Entry 835 (2026-11-17T19:04:14Z)
+- Entry 836 (2026-11-17T19:04:30Z)

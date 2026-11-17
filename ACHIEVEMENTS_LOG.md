@@ -988,3 +988,4 @@ Work log branch. `main` is unchanged.
 - Entry 984 (2026-11-17T19:48:06Z)
 - Entry 985 (2026-11-17T19:48:23Z)
 - Entry 986 (2026-11-17T19:48:40Z)
+- Entry 987 (2026-11-17T19:48:56Z)
